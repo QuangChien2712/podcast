@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useAlert } from 'react-alert'
 import { logout } from '../../actions/userActions'
 
-import Search from './Search'
-
 import '../../App.css'
 
 const Header = () => {
@@ -25,17 +23,15 @@ const Header = () => {
             <nav className="navbar row">
                 <div className="col-12 col-md-3">
                     <div className="navbar-brand">
-                        <Link to="/">
-                            <img src="/images/logo.png" alt='' />
-                        </Link>
+                        
                     </div>
                 </div>
 
                 <div className="col-12 col-md-6 mt-2 mt-md-0">
-                    <Route render={({ history }) => <Search history={history} />} />
+                    
                 </div>
 
-                <div className="col-12 col-md-3 mt-4 mt-md-0 text-center">
+                <div className="col-12 col-md-2 mt-4 mt-md-0 text-center">
                     
 
                     {user ? (
@@ -44,7 +40,7 @@ const Header = () => {
 
                                 <figure className="avatar avatar-nav">
                                     <img
-                                        src={user.avatar && user.avatar.url}
+                                        src={user.avatar && user.avatar.split("CHIEN")[1]}
                                         alt={user && user.name}
                                         className="rounded-circle"
                                     />

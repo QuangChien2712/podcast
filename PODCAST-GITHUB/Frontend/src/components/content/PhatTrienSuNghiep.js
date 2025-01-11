@@ -22,6 +22,8 @@ const PhatTrienSuNghiep = ({ history }) => {
   );
   console.log("contentsPTSN: ", contents);
 
+  
+
   useEffect(() => {
     // if(contents && contents.length === 0){
     //     dispatch(getAdminContentsPTSN("HM1"));

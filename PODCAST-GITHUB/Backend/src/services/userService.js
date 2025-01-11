@@ -157,6 +157,7 @@ let handleUserLogin = (email, password, res) => {
       if (isExist) {
         let user = await db.User.findOne({
           attributes: [
+            "id",
             "email",
             "password",
             "name",
@@ -164,33 +165,38 @@ let handleUserLogin = (email, password, res) => {
             "typeRole",
             "phoneNumber",
             "isSchedule",
+            "createdAt",
           ],
           where: { email: email },
           raw: true,
         });
 
         if (user) {
-          // let user = userGoc.dataValues;
           let check = await bcrypt.compareSync(password, user.password);
           if (check) {
-            const accessToken = generateAccessToken(user);
-            const refreshToken = generateRefreshToken(user);
-            refreshTokens = [...refreshTokens, refreshToken];
-            //STORE REFRESH TOKEN IN COOKIE
-            res.cookie("refreshToken", refreshToken, {
-              httpOnly: true,
-              secure: false,
-              path: "/",
-              sameSite: "strict",
-            });
+            if (user.typeRole === "Block") {
+              userData.errCode = 2;
+              userData.errMessage = `Tài khoản bị khóa!`;
+            } else {
+              const accessToken = generateAccessToken(user);
+              const refreshToken = generateRefreshToken(user);
+              refreshTokens = [...refreshTokens, refreshToken];
+              //STORE REFRESH TOKEN IN COOKIE
+              res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: false,
+                path: "/",
+                sameSite: "strict",
+              });
 
-            userData.errCode = 0;
-            userData.errMessage = "Ok";
+              userData.errCode = 0;
+              userData.errMessage = "Ok";
 
-            delete user.password;
-            let user2 = { ...user, accessToken, refreshToken };
-            userData.user = user2;
-            userData.accessToken = accessToken;
+              delete user.password;
+              let user2 = { ...user, accessToken, refreshToken };
+              userData.user = user2;
+              userData.accessToken = accessToken;
+            }
           } else {
             userData.errCode = 3;
             userData.errMessage = "Mật khẩu không đúng!";
@@ -203,7 +209,7 @@ let handleUserLogin = (email, password, res) => {
         userData.errCode = 1;
         userData.errMessage = `Email không tồn tại trong hệ thống!`;
       }
-      
+
       resolve(userData);
     } catch (e) {
       reject(e);
@@ -240,15 +246,10 @@ let getAllUsers = (userId) => {
           },
         });
 
-        if(users){
-          reslove({
-            errCode: 0,
-            message: "Ok",
-            user: users
-          });
+        if (users) {
+          reslove(users);
         }
       }
-
 
       if (userId && userId !== "All" && userId.includes("@gmail.com")) {
         let b = [{}];
@@ -265,16 +266,50 @@ let getAllUsers = (userId) => {
           reslove({
             errCode: 0,
             message: "Ok",
-            user: users[0]
+            user: users[0],
           });
         } else {
           reslove({
             errCode: 0,
-            message: "User không tồn tại"
+            message: "User không tồn tại",
           });
         }
       }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
+let getUser = (userId) => {
+  return new Promise(async (reslove, reject) => {
+    try {
+      let users = "";
+
+      if (userId) {
+        let b = [{}];
+        let userdata = await db.User.findOne({
+          where: { id: userId },
+          attributes: {
+            exclude: ["password"],
+          },
+        });
+
+        if (userdata) {
+          b[0] = userdata;
+          users = b;
+          reslove({
+            errCode: 0,
+            message: "Ok",
+            user: users[0],
+          });
+        } else {
+          reslove({
+            errCode: 0,
+            message: "User không tồn tại",
+          });
+        }
+      }
     } catch (error) {
       reject(error);
     }
@@ -311,8 +346,6 @@ let createNewUser = (data) => {
     }
   });
 };
-
-
 
 let createNewAccount = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -362,7 +395,7 @@ let deleteUser = (uid) => {
 
       resolve({
         errCode: 0,
-        errMessage: "Tài khoản được xóa thành công!",
+        message: "Tài khoản được xóa thành công!",
       });
     } catch (error) {
       reject(error);
@@ -370,13 +403,73 @@ let deleteUser = (uid) => {
   });
 };
 
+// let updateUserData = (user, data) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       if (!data.id) {
+//         resolve({
+//           errCode: 2,
+//           message: "Thiếu dữ liệu đầu vào!",
+//         });
+//       }
+
+//       let userdata = await db.User.findOne({
+//         where: { id: data.id },
+//       });
+
+//       if (userdata) {
+//         if (user.typeRole === "O" || user.typeRole === "A") {
+//           let hashpassword = hashUserPassword(data.password);
+//           await db.User.upsert({
+//             id: data.id,
+//             email: data.email,
+//             password: hashpassword,
+//             name: data.name,
+//             avatar: data.avatar,
+//             typeRole: data.typeRole,
+//             phoneNumber: data.phoneNumber,
+//             isSchedule: data.isSchedule,
+//           });
+//           resolve({
+//             errCode: 0,
+//             message: "Cập nhật tài khoản thành công!",
+//           });
+//         } else {
+//           let hashpassword = hashUserPassword(data.password);
+//           await db.User.upsert({
+//             id: data.id,
+//             email: userdata.email,
+//             password: hashpassword,
+//             name: data.name,
+//             avatar: data.avatar,
+//             typeRole: userdata.typeRole,
+//             phoneNumber: data.phoneNumber,
+//             isSchedule: userdata.isSchedule,
+//           });
+//           resolve({
+//             errCode: 0,
+//             message: "Cập nhật tài khoản thành công!",
+//           });
+//         }
+//       } else {
+//         resolve({
+//           errCode: 1,
+//           message: `Không tìm thấy tài khoản!`,
+//         });
+//       }
+//     } catch (error) {
+//       reject(error);
+//     }
+//   });
+// };
+
 let updateUserData = (user, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
         resolve({
           errCode: 2,
-          errMessage: "Thiếu dữ liệu đầu vào!",
+          message: "Thiếu dữ liệu đầu vào!",
         });
       }
 
@@ -386,46 +479,142 @@ let updateUserData = (user, data) => {
 
       if (userdata) {
         if (user.typeRole === "O" || user.typeRole === "A") {
-          let hashpassword = hashUserPassword(data.password);
           await db.User.upsert({
             id: data.id,
             email: data.email,
-            password: hashpassword,
             name: data.name,
-            avatar: data.avatar,
             typeRole: data.typeRole,
-            phoneNumber: data.phoneNumber,
-            isSchedule: data.isSchedule,
           });
           resolve({
             errCode: 0,
-            errMessage: "Cập nhật tài khoản thành công!",
+            message: "Cập nhật tài khoản thành công!",
           });
         } else {
-          let hashpassword = hashUserPassword(data.password);
           await db.User.upsert({
             id: data.id,
             email: userdata.email,
-            password: hashpassword,
             name: data.name,
-            avatar: data.avatar,
             typeRole: userdata.typeRole,
-            phoneNumber: data.phoneNumber,
-            isSchedule: userdata.isSchedule,
           });
           resolve({
             errCode: 0,
-            errMessage: "Cập nhật tài khoản thành công!",
+            message: "Cập nhật tài khoản thành công!",
           });
         }
       } else {
         resolve({
           errCode: 1,
-          errMessage: `Không tìm thấy tài khoản!`,
+          message: `Không tìm thấy tài khoản!`,
         });
       }
     } catch (error) {
       reject(error);
+    }
+  });
+};
+
+let updateAccountData = (user, data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.id) {
+        resolve({
+          errCode: 2,
+          message: "Thiếu dữ liệu đầu vào!",
+        });
+      }
+
+      let userdata = await db.User.findOne({
+        where: { id: data.id },
+      });
+
+      if (userdata) {
+        if (
+          user.typeRole === "O" ||
+          user.typeRole === "A" ||
+          user.typeRole === "K"
+        ) {
+          await db.User.upsert({
+            id: data.id,
+            email: data.email,
+            name: data.name,
+            avatar: data.avatar,
+          });
+          resolve({
+            errCode: 0,
+            message: "Cập nhật tài khoản thành công!",
+          });
+        }
+      } else {
+        resolve({
+          errCode: 1,
+          message: `Tài khoản không tồn tại!`,
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+let checkUserId = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        where: { id: userId },
+        raw: true,
+      });
+      if (user) {
+        resolve(user);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let updatePassword = (id, oldPassword, password) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await checkUserId(id);
+
+      if (user) {
+        let check = await bcrypt.compareSync(oldPassword, user.password);
+        console.log("so sánh pass: ", check);
+        
+        if (!check) {
+          resolve({
+            errCode: 1,
+            message: "Mật khẩu cũ không đúng!",
+          });
+          
+        } else {
+          let hashpassword = hashUserPassword(password);
+          await db.User.upsert({
+            id: user.id,
+            email: user.email,
+            password: hashpassword,
+            name: user.name,
+            avatar: user.avatar,
+            typeRole: user.typeRole,
+            phoneNumber: user.phoneNumber,
+            isSchedule: user.isSchedule,
+          });
+          resolve({
+            errCode: 0,
+            message: "Cập nhật mật khẩu thành công!",
+          });
+        }
+
+      } else {
+        resolve({
+          errCode: 1,
+          message: "Tài khoản không tồn tại!",
+        });
+      }
+    } catch (e) {
+      reject(e);
     }
   });
 };
@@ -437,9 +626,12 @@ module.exports = {
   handleUserLogin: handleUserLogin,
 
   getAllUsers: getAllUsers,
+  getUser: getUser,
   createNewUser: createNewUser,
   deleteUser: deleteUser,
   updateUserData: updateUserData,
 
-  createNewAccount: createNewAccount
+  createNewAccount: createNewAccount,
+  updateAccountData: updateAccountData,
+  updatePassword: updatePassword,
 };

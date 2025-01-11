@@ -14,12 +14,16 @@ let router = express.Router();
 
 const initWebRoute = (app) => {
     router.post("/create-new-account", userController.handleCreateNewAccount);
+    router.put("/edit-account", verifyToken.verifyTokenAndAuth, userController.handleEditAccount);
+    router.put("/update-password", verifyToken.verifyTokenAndAuth, userController.handleUpdatePassword);
     router.post("/login", userController.handleLogin);
+    router.post("/logout", userController.handleLogout);
     router.post("/refresh", verifyToken.verifyToken, userService.requestRefreshToken);
 
     // User
     router.get("/get-all-users", verifyToken.verifyTokenAndAuth, userController.handleGetAllUsers); 
     router.get("/get-account", verifyToken.verifyTokenAndAuth, userController.handleGetAccount);    
+    router.get("/get-user", verifyToken.verifyTokenAndAuth, userController.handleGetUser);    
     
     router.put("/edit-user", verifyToken.verifyTokenAndAuth, userController.handleEditUser);
     router.post("/create-new-user", verifyToken.verifyTokenAndIsAdmin, userController.handleCreateNewUser);
@@ -39,7 +43,7 @@ const initWebRoute = (app) => {
     router.put("/edit-review", verifyToken.verifyTokenAndAuth, reviewController.handleEditReview);
     router.delete("/delete-review", verifyToken.verifyTokenAndAuth, reviewController.handleDeleteReview);
 
-    router.get("/get-content-review", verifyToken.verifyTokenAndAuth, reviewController.handleGetReview); 
+    router.get("/get-content-review", reviewController.handleGetReview); 
 
     // Measure
     router.post("/create-new-measure", verifyToken.verifyTokenAndAuth, measureController.handleCreateNewMeasure);

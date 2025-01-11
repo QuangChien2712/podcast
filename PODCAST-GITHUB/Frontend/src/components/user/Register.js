@@ -37,7 +37,10 @@ const Register = ({ history }) => {
   const redirect = isAuthenticated ? "/" : window.location.pathname;
 
   useEffect(() => {
-    history.push(redirect);
+    if (isAuthenticated) {
+      history.goBack();
+    }
+    // history.push(redirect);
 
     if (error) {
       alert.error(error);

@@ -380,33 +380,14 @@ export const newReview = (reviewData) => async (dispatch) => {
 
 // Get content reviews
 export const getContentReviews = (idContent) => async (dispatch) => {
-  try {
-    let cookies = document.cookie;
-    let arrCookies = cookies.split(";");
-    let accessToken = "";
+  try {  
+    dispatch({ type: GET_REVIEWS_REQUEST });    
+    const { data } = await axios.get(`/api/get-content-review?idContent=${idContent}`);
 
-    for (let index = 0; index < arrCookies.length; index++) {
-      const element = arrCookies[index];
-      if (element.split("=")[0].includes("accessToken")) {
-        accessToken = element.split("=")[1];
-        break;
-      }
-    }
-    dispatch({ type: GET_REVIEWS_REQUEST });
-    const config = {
-      headers: {
-        token: `Beare ${accessToken}`,
-      },
-      // withCredentials: true
-    };   
-    const { data } = await axios.get(`/api/get-content-review?idContent=${idContent}`, config);
-
-    if(data && data.reviews && data.reviews.length > 0){
       dispatch({
         type: GET_REVIEWS_SUCCESS,
         payload: data.reviews,
-      });
-    }
+      }); 
    
   } catch (error) {
     dispatch({

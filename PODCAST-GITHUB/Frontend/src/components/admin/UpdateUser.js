@@ -12,7 +12,8 @@ const UpdateUser = ({ history, match }) => {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [role, setRole] = useState('')
+    const [typeRole, setTypeRole] = useState('')
+    const [id, setId] = useState('')
 
     const alert = useAlert();
     const dispatch = useDispatch();
@@ -24,13 +25,14 @@ const UpdateUser = ({ history, match }) => {
 
     useEffect(() => {
 
-        console.log(user && user._id !== userId);
-        if (user && user._id !== userId) {
+        console.log("user là: ", user, user && String(user.id) !== userId);
+        if (user && String(user.id) !== userId) {
             dispatch(getUserDetails(userId))
         } else {
-            setName(user.name);
             setEmail(user.email);
-            setRole(user.typeRole)
+            setName(user.name);
+            setTypeRole(user.typeRole)
+            setId(user.id)
         }
 
         if (error) {
@@ -39,16 +41,19 @@ const UpdateUser = ({ history, match }) => {
         }
 
         if (isUpdated) {
-            alert.success('Cập nhật người dùng thành công')
-
+            alert.success('Cập nhật người dùng thành công')            
+            
             history.push('/admin/users')
 
             dispatch({
                 type: UPDATE_USER_RESET
             })
+            
+            window.location.reload();
         }
 
     }, [dispatch, alert, error, history, isUpdated, userId, user])
+
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -56,9 +61,10 @@ const UpdateUser = ({ history, match }) => {
         const formData = new FormData();
         formData.set('name', name);
         formData.set('email', email);
-        formData.set('role', role);
+        formData.set('typeRole', typeRole);
+        formData.set('id', id);
 
-        dispatch(updateUser(user._id, formData))
+        dispatch(updateUser(formData))
     }
 
 
@@ -101,18 +107,19 @@ const UpdateUser = ({ history, match }) => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label htmlFor="role_field">Quyền</label>
+                                    <label htmlFor="typeRole_field">Quyền</label>
 
                                     <select
-                                        id="role_field"
+                                        id="typeRole_field"
                                         className="form-control"
-                                        name='role'
-                                        value={role}
-                                        onChange={(e) => setRole(e.target.value)}
+                                        name='typeRole'
+                                        value={typeRole}
+                                        onChange={(e) => setTypeRole(e.target.value)}
                                     >
-                                        <option value="user">Người dùng</option>
-                                        <option value="admin">Quản trị</option>
-                                        <option value="look">Khóa tài khoản</option>
+                                        <option value="K">Người dùng</option>
+                                        <option value="O">Chủ doanh nghiệp</option>
+                                        <option value="A">Quản trị viên</option>
+                                        <option value="Block">Khóa tài khoản</option>
                                     </select>
                                 </div>
 

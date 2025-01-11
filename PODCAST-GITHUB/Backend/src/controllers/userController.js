@@ -27,23 +27,35 @@ let handleLogin = async (req, res) => {
   });
 };
 
+let handleLogout = async (req, res, next) => {
+  res.cookie("accessToken", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Đã đăng xuất",
+  });
+};
+
 let handleGetAllUsers = async (req, res) => {
   let email = req.user.email;
   let role = req.user.typeRole;
 
-  if (role) {
+  if (role && email) {
     if (role === "A" || role === "O") {
       let users = await userService.getAllUsers("All");
       return res.status(200).json({
         errCode: 0,
-        errMessage: "Ok",
+        message: "Ok",
         users: users,
       });
     } else {
       let users = await userService.getAllUsers(email);
       return res.status(200).json({
         errCode: 0,
-        errMessage: "Ok",
+        message: "Ok",
         users: users,
       });
     }
@@ -74,16 +86,33 @@ let handleGetAllUsers = async (req, res) => {
 let handleGetAccount = async (req, res) => {
   let email = req.user.email;
   console.log("email là: ", email);
-  
+
   if (email) {
     let data = await userService.getAllUsers(email);
     console.log("data account là: ", data);
-    
+
     return res.status(200).json(data);
-  }else{
+  } else {
     return res.status(200).json({
       errCode: 0,
-      message: "Thiếu dữ liệu đầu vào"
+      message: "Thiếu dữ liệu đầu vào",
+    });
+  }
+};
+
+let handleGetUser = async (req, res) => {
+  let id = req.query.id;
+  console.log("id là: ", id);
+
+  if (id) {
+    let data = await userService.getUser(id);
+    console.log("data account là: ", data);
+
+    return res.status(200).json(data);
+  } else {
+    return res.status(200).json({
+      errCode: 0,
+      message: "Thiếu dữ liệu đầu vào",
     });
   }
 };
@@ -102,7 +131,7 @@ let handleCreateNewUser = async (req, res) => {
   let imagesLinks = [];
 
   if (req.body.images) {
-    if(typeof req.body.images === "string") {
+    if (typeof req.body.images === "string") {
       images.push(req.body.images);
     } else {
       images = req.body.images;
@@ -128,28 +157,25 @@ let handleCreateNewUser = async (req, res) => {
 let handleCreateNewAccount = async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
+  let images = req.body.avatar;
+
   if (!email || !password) {
     return res.status(500).json({
       errCode: 1,
       message: "Thiếu dữ liệu đầu vào!",
     });
   }
-  let images = [];
-  let imagesLinks = [];
 
-  if(req.body.images){
-    images = req.body.images.split("CHIEN");    
-    for (let i = 0; i < images.length; i++) {
-      const result = await cloudinary.v2.uploader.upload(images[i], {
-        folder: "podcast",
-      });
-      imagesLinks.push(result.public_id);
-      imagesLinks.push(result.secure_url);
-    }
-  }  
- 
+  let imagesLinks = [];
+  if (images) {
+    const result = await cloudinary.v2.uploader.upload(images, {
+      folder: "podcast",
+    });
+    imagesLinks.push(result.public_id);
+    imagesLinks.push(result.secure_url);
+  }
+
   let imagesLinksString = imagesLinks.join("CHIEN");
-  console.log("url: ", imagesLinksString);
 
   req.body.avatar = imagesLinksString;
   let data = await userService.createNewAccount(req.body);
@@ -174,8 +200,52 @@ let handleEditUser = async (req, res) => {
   return res.status(200).json(message);
 };
 
+let handleEditAccount = async (req, res) => {
+  let user = req.user;
+  let email = req.body.email;
+  let images = req.body.avatar;
+
+  if (!email) {
+    return res.status(500).json({
+      errCode: 1,
+      message: "Thiếu dữ liệu đầu vào!",
+    });
+  }
+
+  let imagesLinks = [];
+  if (images) {
+    const result = await cloudinary.v2.uploader.upload(images, {
+      folder: "podcast",
+    });
+    imagesLinks.push(result.public_id);
+    imagesLinks.push(result.secure_url);
+  }
+
+  let imagesLinksString = imagesLinks.join("CHIEN");
+
+  req.body.avatar = imagesLinksString;
+
+  let message = await userService.updateAccountData(user, req.body);
+  return res.status(200).json(message);
+};
+
+
+let handleUpdatePassword = async (req, res) => {
+  let id = req.user.id;
+  let oldPassword = req.body.oldPassword;
+  let password = req.body.password;
+
+  console.log("body update password: ", id, oldPassword, password);
+  
+
+  let message = await userService.updatePassword(String(id), oldPassword, password);
+  return res.status(200).json(message);
+  
+};
+
 module.exports = {
   handleLogin: handleLogin,
+  handleLogout: handleLogout,
   handleGetAllUsers: handleGetAllUsers,
   handleCreateNewUser: handleCreateNewUser,
   handleDeleteUser: handleDeleteUser,
@@ -183,4 +253,7 @@ module.exports = {
 
   handleCreateNewAccount: handleCreateNewAccount,
   handleGetAccount: handleGetAccount,
+  handleGetUser: handleGetUser,
+  handleEditAccount: handleEditAccount,
+  handleUpdatePassword: handleUpdatePassword
 };

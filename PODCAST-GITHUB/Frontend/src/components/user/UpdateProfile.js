@@ -12,7 +12,7 @@ const UpdateProfile = ({ history }) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [avatar, setAvatar] = useState('')
-    const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg')
+    const [avatarPreview, setAvatarPreview] = useState('')
 
     const alert = useAlert();
     const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const UpdateProfile = ({ history }) => {
         if (user) {
             setName(user.name);
             setEmail(user.email);
-            setAvatarPreview(user.avatar.url)
+            setAvatarPreview(user.avatar.split("CHIEN") ? user.avatar.split("CHIEN")[1] : "")
         }
 
         if (error) {
@@ -34,25 +34,32 @@ const UpdateProfile = ({ history }) => {
         }
 
         if (isUpdated) {
-            alert.success('Cập nhật thành công')
-            dispatch(loadUser());
+            alert.success('Cập nhật thành công')          
 
-            history.push('/me')
+            // history.push('/me')
+            history.goBack()
+            dispatch(loadUser());
 
             dispatch({
                 type: UPDATE_PROFILE_RESET
             })
+
+            
         }
 
     }, [dispatch, alert, error, history, isUpdated, user])
 
     const submitHandler = (e) => {
         e.preventDefault();
-
+        if(!avatar){
+            alert.error("Hãy chọn ảnh đại diện!");
+            return;
+        }
         const formData = new FormData();
         formData.set('name', name);
         formData.set('email', email);
         formData.set('avatar', avatar);
+        formData.set('id', user.id);
 
         dispatch(updateProfile(formData))
     }

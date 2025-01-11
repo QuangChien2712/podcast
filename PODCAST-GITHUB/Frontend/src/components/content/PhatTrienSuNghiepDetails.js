@@ -18,7 +18,9 @@ import {
 const PhatTrienSuNghiepDetails = ({ match, history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
+  
   const contentId = match.params.id;
+  
   const { error: reviewError, success } = useSelector(
     (state) => state.newReview
   );
@@ -42,23 +44,12 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
 
   
   useEffect(() => {
-    // history.push(pathDetails);
-    
-    if(content && !content.id){
-      dispatch(getContentDetailsPTSN(contentId));
-    }
 
-    if(content && content.id &&  String(content.id) !== contentId){
+    if(String(content.id) !== contentId){
       dispatch(getContentDetailsPTSN(contentId));
-    }    
-
-    if(user && content && content.id &&  String(content.id) !== contentId){
       dispatch(getContentReviews(contentId));
     } 
-
-    if(!Boolean(reviews)){
-      dispatch(getContentReviews(contentId));
-    }
+    
 
       if (reviews && reviews.length > 0 && user) {
         for (let index = 0; index < reviews.length; index++) {
@@ -87,7 +78,6 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
     }
 
     if (success) {
-      // dispatch({ type: NEW_REVIEW_RESET });
       dispatch(getContentReviews(content.id));
       setIsLike(true);
     }
@@ -119,6 +109,8 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
       console.log("list cmt: ", listreviews);
       
       setListCommentContens(listreviews);
+    }else{
+      setListCommentContens([]);
     }    
   }, [dispatch, reviews])
 
@@ -174,6 +166,7 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
     setOpenComment(false);
     setComment("");
     dispatch(getContentReviews(contentId));
+    window.location.reload();
   }
 
   const shareMangXaHoi = ()=>{

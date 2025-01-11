@@ -32,7 +32,12 @@ import {
     UPDATE_USER_FAIL,
     LOGOUT_SUCCESS,
     LOGOUT_FAIL,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+
+
+    DELETE_USER_REQUEST,
+    DELETE_USER_SUCCESS,
+    DELETE_USER_FAIL,
 } from '../constants/userConstants'
 
 // Login
@@ -167,24 +172,86 @@ export const loadUser = () => async (dispatch) => {
     }
 }
 
+
+export const deleteUser = (id) => async (dispatch) => {
+    try {
+
+        let cookies = document.cookie;
+        let arrCookies = cookies.split(";");
+        let accessToken = "";
+
+        for (let index = 0; index < arrCookies.length; index++) {
+            const element = arrCookies[index];
+            if(element.split("=")[0].includes("accessToken")){
+                accessToken = element.split("=")[1];
+                break;
+            }
+        }
+       
+        console.log("accessToken Account là: ", accessToken);
+
+        dispatch({ type: DELETE_USER_REQUEST })
+
+        const config = {
+            headers: {
+                "token": `Beare ${accessToken}`
+            }
+            // withCredentials: true
+        }
+
+        const { data } = await axios.delete(`/api/delete-user?id=${id}`, config);
+        console.log("user action: ", data.user);  
+        
+       
+              dispatch({
+                type: DELETE_USER_SUCCESS,
+                payload: true,
+              });
+           
+
+    } catch (error) {
+        console.log("er: ", error.response.data);
+        
+        dispatch({
+            type: DELETE_USER_FAIL,
+            payload: error.response.data
+        })
+    }
+}
+
 // Update profile
 export const updateProfile = (userData) => async (dispatch) => {
     try {
+
+        let cookies = document.cookie;
+        let arrCookies = cookies.split(";");
+        let accessToken = "";
+
+        for (let index = 0; index < arrCookies.length; index++) {
+            const element = arrCookies[index];
+            if(element.split("=")[0].includes("accessToken")){
+                accessToken = element.split("=")[1];
+                break;
+            }
+        }
+       
+        console.log("accessToken Account là: ", accessToken);
 
         dispatch({ type: UPDATE_PROFILE_REQUEST })
 
         const config = {
             headers: {
-                'Content-Type': 'multipart/form-data'
-            },
-            withCredentials: true
+                'Content-Type': 'multipart/form-data',
+                "token": `Beare ${accessToken}`
+            }
+            // withCredentials: true
         }
 
-        const { data } = await axios.put('/api/v1/me/update', userData, config)
+        const { data } = await axios.put('/api/edit-account', userData, config)
 
         dispatch({
             type: UPDATE_PROFILE_SUCCESS,
-            payload: data.success
+            payload: true
         })
 
     } catch (error) {
@@ -198,27 +265,45 @@ export const updateProfile = (userData) => async (dispatch) => {
 // Update password
 export const updatePassword = (passwords) => async (dispatch) => {
     try {
+        let cookies = document.cookie;
+        let arrCookies = cookies.split(";");
+        let accessToken = "";
 
+        for (let index = 0; index < arrCookies.length; index++) {
+            const element = arrCookies[index];
+            if(element.split("=")[0].includes("accessToken")){
+                accessToken = element.split("=")[1];
+                break;
+            }
+        }
+       
         dispatch({ type: UPDATE_PASSWORD_REQUEST })
-
+        
         const config = {
             headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
+                "Content-Type": "multipart/form-data",
+                "token": `Beare ${accessToken}`
+            }           
         }
 
-        const { data } = await axios.put('/api/v1/password/update', passwords, config)
+        const { data } = await axios.put('/api/update-password', passwords, config)
 
-        dispatch({
-            type: UPDATE_PASSWORD_SUCCESS,
-            payload: data.success
-        })
+        if(data && data.errCode === 0){
+            dispatch({
+                type: UPDATE_PASSWORD_SUCCESS,
+                payload: data.message
+            })
+        }else{
+            dispatch({
+                type: UPDATE_PASSWORD_FAIL,
+                payload: data.message
+            })
+        }        
 
     } catch (error) {
         dispatch({
             type: UPDATE_PASSWORD_FAIL,
-            payload: error.response.data.message
+            payload: error.response
         })
     }
 }
@@ -283,11 +368,21 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
     try {
 
-        await axios.get('/api/v1/logout')
+        let setCookie = (cname, cvalue, minutes) => {
+            let d = new Date();
+            d.setTime(d.getTime() + (minutes*60*1000));
+            let expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + "; " + expires;
+        }
+       
+        await axios.post('/api/logout')
 
         dispatch({
             type: LOGOUT_SUCCESS,
         })
+
+        setCookie("accessToken", null);
+        setCookie("refreshToken", null);
 
     } catch (error) {
         dispatch({
@@ -301,9 +396,31 @@ export const logout = () => async (dispatch) => {
 export const allUsers = () => async (dispatch) => {
     try {
 
+        let cookies = document.cookie;
+        let arrCookies = cookies.split(";");
+        let accessToken = "";
+
+        for (let index = 0; index < arrCookies.length; index++) {
+            const element = arrCookies[index];
+            if(element.split("=")[0].includes("accessToken")){
+                accessToken = element.split("=")[1];
+                break;
+            }
+        }
+       
+        console.log("accessToken Account là: ", accessToken);
+
         dispatch({ type: ALL_USERS_REQUEST })
 
-        const { data } = await axios.get('/api/v1/admin/users')
+        const config = {
+            headers: {
+                "token": `Beare ${accessToken}`
+            }
+            // withCredentials: true
+        }
+        
+
+        const { data } = await axios.get('/api/get-all-users', config)
 
         dispatch({
             type: ALL_USERS_SUCCESS,
@@ -319,23 +436,36 @@ export const allUsers = () => async (dispatch) => {
 }
 
 // Update user - ADMIN
-export const updateUser = (id, userData) => async (dispatch) => {
+export const updateUser = (userData) => async (dispatch) => {
     try {
+        let cookies = document.cookie;
+            let arrCookies = cookies.split(";");
+            let accessToken = "";
+        
+            for (let index = 0; index < arrCookies.length; index++) {
+              const element = arrCookies[index];
+              if (element.split("=")[0].includes("accessToken")) {
+                accessToken = element.split("=")[1];
+                break;
+              }
+            }
+            console.log("accessToken updateUser là: ", accessToken);
+        
+            dispatch({ type: UPDATE_USER_REQUEST })
+        
+            const config = {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                token: `Beare ${accessToken}`,
+              },
+              // withCredentials: true
+            };
 
-        dispatch({ type: UPDATE_USER_REQUEST })
-
-        const config = {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        }
-
-        const { data } = await axios.put(`/api/v1/admin/user/${id}`, userData, config)
+        const { data } = await axios.put(`/api/edit-user`, userData, config)
 
         dispatch({
             type: UPDATE_USER_SUCCESS,
-            payload: data.success
+            payload: true
         })
 
     } catch (error) {
@@ -349,11 +479,31 @@ export const updateUser = (id, userData) => async (dispatch) => {
 // Get user details - ADMIN
 export const getUserDetails = (id) => async (dispatch) => {
     try {
+        let cookies = document.cookie;
+            let arrCookies = cookies.split(";");
+            let accessToken = "";
+        
+            for (let index = 0; index < arrCookies.length; index++) {
+              const element = arrCookies[index];
+              if (element.split("=")[0].includes("accessToken")) {
+                accessToken = element.split("=")[1];
+                break;
+              }
+            }
+        
+            console.log("accessToken getUser là: ", accessToken);
+        
+            dispatch({ type: USER_DETAILS_REQUEST })
+        
+            const config = {
+              headers: {
+                token: `Beare ${accessToken}`,
+              },
+              // withCredentials: true
+            };       
 
-        dispatch({ type: USER_DETAILS_REQUEST })
 
-
-        const { data } = await axios.get(`/api/v1/admin/user/${id}`)
+        const { data } = await axios.get(`/api/get-user?id=${id}`, config)
 
         dispatch({
             type: USER_DETAILS_SUCCESS,

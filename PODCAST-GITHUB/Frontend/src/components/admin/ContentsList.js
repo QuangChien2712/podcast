@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MDBDataTable } from 'mdbreact'
 
@@ -18,6 +18,7 @@ const ContentsList = ({ history }) => {
 
     const { loading, error, contents } = useSelector(state => state.contents);
     const { error: deleteError, isDeleted } = useSelector(state => state.content)
+    const [idDelete, setIdDelete] = useState("")
 
     useEffect(() => {
         
@@ -41,6 +42,14 @@ const ContentsList = ({ history }) => {
         }
 
     }, [dispatch, alert, error, deleteError, isDeleted, history])
+
+    const handleIdDelete = (id) => {
+        setIdDelete(id);
+     }
+
+     const deleteContentHandler = (id) => {     
+        dispatch(deleteContent(id))
+    }
 
     const setContents = () => {
                 
@@ -108,7 +117,7 @@ const ContentsList = ({ history }) => {
                     <Link to={`/admin/content/${content.id}`} className="btn btn-primary py-1 px-2">
                         <i className="fa fa-pencil"></i>
                     </Link>
-                    <button className="btn btn-danger py-1 px-2 ml-2" data-toggle="modal" data-target="#exampleModal" >
+                    <button onClick={() => handleIdDelete(content.id)}  className="btn btn-danger py-1 px-2 ml-2" data-toggle="modal" data-target="#exampleModal" >
                         <i className="fa fa-trash"></i>
                     </button>
                     {/* model delete */}
@@ -127,7 +136,7 @@ const ContentsList = ({ history }) => {
                                     </div>
                                     <div className="modal-footer">
                                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                        <button type="button" className="btn btn-danger" onClick={() => deleteContentHandler(content.id)} data-dismiss="modal">Xóa</button>
+                                        <button type="button" className="btn btn-danger" onClick={() => deleteContentHandler(idDelete)} data-dismiss="modal">Xóa</button>
                                     </div>
                                 </div>
                             </div>
@@ -140,10 +149,9 @@ const ContentsList = ({ history }) => {
         return data;
     }
 
-    const deleteContentHandler = (id) => {
-        dispatch(deleteContent(id))
-    }
+    
 
+    
     return (
         <Fragment>
             <MetaData title={'Tất cả bài viết'} />

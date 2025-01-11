@@ -4,7 +4,6 @@ import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css';
 
 import MetaData from './layout/MetaData'
-import Content from './content/Content'
 import Loader from './layout/Loader'
 
 import { useDispatch, useSelector } from 'react-redux'

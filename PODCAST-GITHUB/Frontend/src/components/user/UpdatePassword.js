@@ -25,9 +25,10 @@ const UpdatePassword = ({ history }) => {
         }
 
         if (isUpdated) {
-            alert.success('Cập nhật mật khẩu thành công')
+            alert.success(isUpdated)
 
-            history.push('/me')
+            // history.push('/me')
+            history.goBack()
 
             dispatch({
                 type: UPDATE_PASSWORD_RESET

@@ -5,7 +5,6 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 
 import Home from "./components/Home";
-import ContentDetails from "./components/content/ContentDetails";
 
 
 // Auth or User imports
@@ -60,10 +59,10 @@ function App() {
     <Router>
       <div className="App">
         {/*<Header />*/}
+        <Header />
         <div>
           <Route path="/" component={Home} exact />
           <Route path="/search/:keyword" component={Home} />
-          <Route path="/content/:id" component={ContentDetails} exact />
 
          
           <Route path="/phat-trien-su-nghiep" component={PhatTrienSuNghiep} exact/>
@@ -108,6 +107,7 @@ function App() {
           component={UsersList}
           exact
         />
+
         <ProtectedRoute
           path="/admin/user/:id"
           isAdmin={true}
@@ -120,6 +120,7 @@ function App() {
           <Footer />
         )} */}
 
+        
         {/*<Footer />*/}
       </div>
     </Router>

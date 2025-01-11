@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MDBDataTable } from 'mdbreact'
 
@@ -10,6 +10,7 @@ import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
 import { allUsers, clearErrors } from '../../actions/userActions'
 import { DELETE_USER_RESET } from '../../constants/userConstants'
+import { deleteUser } from '../../actions/userActions'
 
 const UsersList = ({ history }) => {
 
@@ -18,6 +19,7 @@ const UsersList = ({ history }) => {
 
     const { loading, error, users } = useSelector(state => state.allUsers);
     const { isDeleted } = useSelector(state => state.user)
+    const [idDelete, setIdDelete] = useState("")
 
     useEffect(() => {
         dispatch(allUsers());
@@ -35,6 +37,13 @@ const UsersList = ({ history }) => {
 
     }, [dispatch, alert, error, isDeleted, history])
 
+    const handleIdDelete = (id) => {
+        setIdDelete(id);
+     }
+
+     const deleteUserHandler = (id) => {     
+             dispatch(deleteUser(id))
+         }
 
     const setUsers = () => {
         const data = {
@@ -43,6 +52,11 @@ const UsersList = ({ history }) => {
                     label: 'ID',
                     field: 'id',
                     sort: 'asc'
+                },                
+                {
+                    label: 'Email',
+                    field: 'email',
+                    sort: 'asc'
                 },
                 {
                     label: 'Tên người dùng',
@@ -50,18 +64,18 @@ const UsersList = ({ history }) => {
                     sort: 'asc'
                 },
                 {
-                    label: 'Email',
-                    field: 'email',
-                    sort: 'asc'
-                },
-                {
                     label: 'Quyền',
-                    field: 'role',
+                    field: 'typeRole',
                     sort: 'asc'
                 },
                 {
-                    label: 'Trạng thái tài khoản    ',
-                    field: 'status',
+                    label: 'Số điện thoại',
+                    field: 'phoneNumber',
+                    sort: 'asc'
+                },
+                {
+                    label: 'Đã đặt lịch',
+                    field: 'isSchedule',
                     sort: 'asc'
                 },
                 {
@@ -73,36 +87,44 @@ const UsersList = ({ history }) => {
         }
 
         users.forEach(userr => {
-            let hoat_dong = '';
-            if (userr.role === "look") {
-                userr.role = "Đã bị khóa"
-            }
-            if (userr.role === "user") {
-                userr.role = "Người dùng"
-            }
-            if (userr.role === "admin") {
-                userr.role = "Quản trị"
-            }
-            if (userr.role === "Người dùng" || "Quản trị") {
-                hoat_dong = "Hoạt động"
-            }
-
+            
             data.rows.push({
-                id: userr._id,
-                name: userr.name,
+                id: userr.id,
                 email: userr.email,
-                role: userr.role,
-                status: userr.role && String(userr.role).includes('Đã bị khóa')
-                    ? <p style={{ color: 'red' }}><i className="bi bi-key-fill"></i> {userr.role}</p>
-                    : <p style={{ color: 'green' }}><i className="bi bi-activity"></i> {hoat_dong}</p>,
+                name: userr.name,
+                typeRole: userr.typeRole,
+                phoneNumber: userr.phoneNumber,
+                isSchedule: userr.isSchedule,
                 actions: <Fragment>
                     &emsp;
-                    <Link to={`/admin/user/${userr._id}`} className="btn btn-primary py-1 px-2">
+                    <Link to={`/admin/user/${userr.id}`} className="btn btn-primary py-1 px-2">
                         <i className="fa fa-pencil"></i>
-                    </Link>&emsp;
-                    <Link to={`/admin/look_user/${userr._id}`} className="btn btn-danger py-1 px-2">
-                        <i className="bi bi-key-fill"></i>
-                    </Link>
+                    </Link>&emsp;                  
+                    <button onClick={() => handleIdDelete(userr.id)}  className="btn btn-danger py-1 px-2 ml-2" data-toggle="modal" data-target="#exampleModal" >
+                        <i className="fa fa-trash"></i>
+                    </button>
+                    {/* model delete */}
+                    <div>
+                        <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div className="modal-dialog" role="document">
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title" id="exampleModalLabel">XÓA BÀI VIẾT</h5>
+                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div className="modal-body">
+                                        Xóa vĩnh viễn bài viết?
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                        <button type="button" className="btn btn-danger" onClick={() => deleteUserHandler(idDelete)} data-dismiss="modal">Xóa</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </Fragment>
             })

@@ -104,6 +104,7 @@ const UpdateContent = ({ match, history }) => {
       history.push("/admin/contents");
       alert.success("Content updated successfully");
       dispatch({ type: UPDATE_CONTENT_RESET });
+      window.location.reload();
     }
   }, [
     dispatch,
@@ -133,7 +134,6 @@ const UpdateContent = ({ match, history }) => {
     // images.forEach(image => {
     //     formData.append('images', image)
     // })
-
     dispatch(updateContent(formData));
   };
 

@@ -80,7 +80,7 @@ const Login = ({ history, location }) => {
                                     ĐĂNG NHẬP
                                 </button>
 
-                                <Link to="/register" className="float-right mt-3">Bạn chưa có tài khoản?</Link>
+                                <Link to="/register" className="float-right mt-3">Đăng ký</Link>
                             </form>
                         </div>
                     </div>

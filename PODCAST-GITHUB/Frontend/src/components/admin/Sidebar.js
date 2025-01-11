@@ -8,16 +8,13 @@ const Sidebar = () => {
                 <ul className="list-unstyled components">
                     
                     <li>
-                        <Link to="/admin/contents"><i
-                            className="fa fa-content-hunt"></i> Quản lý bài viết</Link>
+                        <Link to="/admin/contents"><i className="fa fa-product-hunt"></i> Quản lý bài viết</Link>
+                    </li>                    
+                    <li>
+                    <Link to="/admin/reviews"><i className="fa fa-star"></i> Quản lý tương tác</Link>
                     </li>
-
                     <li>
                         <Link to="/admin/users"><i className="fa fa-users"></i> Quản lý người dùng</Link>
-                    </li>
-
-                    <li>
-                        <Link to="/admin/reviews"><i className="fa fa-star"></i> Quản lý bình luận</Link>
                     </li>
 
                 </ul>
