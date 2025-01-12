@@ -30,30 +30,14 @@ import axios from "./axios";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom/cjs/react-router-dom";
 
-// Payment
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-
 import PhatTrienSuNghiep from "./components/content/PhatTrienSuNghiep"
 import PhatTrienSuNghiepDetails from "./components/content/PhatTrienSuNghiepDetails"
 
-function App() {
-  const [stripeApiKey, setStripeApiKey] = useState("");
-
+const App = () => {
   useEffect(() => {
-    store.dispatch(loadUser());
-
-    async function getStripApiKey() {
-      const { data } = await axios.get("/api/v1/stripeapi");
-
-      setStripeApiKey(data.stripeApiKey);
-    }
-
-    getStripApiKey();
+    store.dispatch(loadUser());    
   }, []);
-
-  const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
- 
+  
 
   return (
     <Router>
@@ -67,8 +51,8 @@ function App() {
          
           <Route path="/phat-trien-su-nghiep" component={PhatTrienSuNghiep} exact/>
           <Route path="/phat-trien-su-nghiep/:id" component={PhatTrienSuNghiepDetails} exact/>
-
           <Route path="/login" component={Login} />
+          
           <Route path="/register" component={Register} />
           <ProtectedRoute path="/me" component={Profile} exact />
           <ProtectedRoute path="/me/update" component={UpdateProfile} exact />

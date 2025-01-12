@@ -27,7 +27,7 @@ const Profile = () => {
                         </div>
 
                         <div className="col-12 col-md-5">
-                            <h4>Họ và Tên</h4>
+                            <h4>Họ và tên</h4>
                             <p>{user.name}</p>
 
                             <h4>Email</h4>

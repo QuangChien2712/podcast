@@ -173,7 +173,6 @@ export const updateContent = (contentData) => async (dispatch) => {
         break;
       }
     }
-    console.log("accessToken updateContent là: ", accessToken);
 
     dispatch({ type: UPDATE_CONTENT_REQUEST });
 
@@ -186,7 +185,6 @@ export const updateContent = (contentData) => async (dispatch) => {
     };
 
     const { data } = await axios.put(`/api/edit-content`, contentData, config);
-    console.log("data Update là: ", data);
     
     if (data && data.content) {
       dispatch({
@@ -216,7 +214,6 @@ export const getContentDetails = (id) => async (dispatch) => {
       }
     }
 
-    console.log("accessToken getContentDetails là: ", accessToken);
 
     dispatch({ type: CONTENT_DETAILS_REQUEST });
 
@@ -228,7 +225,6 @@ export const getContentDetails = (id) => async (dispatch) => {
     };
 
     const { data } = await axios.get(`/api/get-all-contents?id=${id}`, config);
-    console.log("dataContent: ", data);
 
     if (data && data.contents && data.contents.tenBaiViet) {
       dispatch({
@@ -237,7 +233,6 @@ export const getContentDetails = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    console.log("data er pr fail: ", error.response.data);
 
     dispatch({
       type: CONTENT_DETAILS_FAIL,
@@ -259,7 +254,6 @@ export const getContentDetailsPTSN = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    console.log("data er pr fail: ", error.response.data);
 
     dispatch({
       type: CONTENT_DETAILS_FAILPTSN,

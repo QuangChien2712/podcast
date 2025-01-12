@@ -25,7 +25,6 @@ const UpdateUser = ({ history, match }) => {
 
     useEffect(() => {
 
-        console.log("user là: ", user, user && String(user.id) !== userId);
         if (user && String(user.id) !== userId) {
             dispatch(getUserDetails(userId))
         } else {
@@ -41,7 +40,7 @@ const UpdateUser = ({ history, match }) => {
         }
 
         if (isUpdated) {
-            alert.success('Cập nhật người dùng thành công')            
+            alert.success('Đã cập nhật người dùng')            
             
             history.push('/admin/users')
 
@@ -83,7 +82,7 @@ const UpdateUser = ({ history, match }) => {
                                 <h1 className="mt-2 mb-5">Cập nhật người dùng</h1>
 
                                 <div className="form-group">
-                                    <label htmlFor="name_field">Tên</label>
+                                    <label htmlFor="name_field">Họ và tên</label>
                                     <input
                                         type="name"
                                         id="name_field"

@@ -62,7 +62,6 @@ export const login = (email, password) => async (dispatch) => {
 
         const {data}  = await axios.post('/api/login', { email, password }, config)
        
-        console.log("user login: ", data.user);
         
         if(data && data.user && data.user.email){
             dispatch({
@@ -140,7 +139,6 @@ export const loadUser = () => async (dispatch) => {
             }
         }
        
-        console.log("accessToken Account là: ", accessToken);
 
         dispatch({ type: LOAD_USER_REQUEST })
 
@@ -152,7 +150,6 @@ export const loadUser = () => async (dispatch) => {
         }
 
         const { data } = await axios.get('/api/get-account', config);
-        console.log("user action: ", data.user);
         
         
         if(data && data.user && data.user.email){
@@ -163,7 +160,6 @@ export const loadUser = () => async (dispatch) => {
         }
 
     } catch (error) {
-        console.log("er: ", error.response.data);
         
         dispatch({
             type: LOAD_USER_FAIL,
@@ -188,7 +184,6 @@ export const deleteUser = (id) => async (dispatch) => {
             }
         }
        
-        console.log("accessToken Account là: ", accessToken);
 
         dispatch({ type: DELETE_USER_REQUEST })
 
@@ -200,7 +195,6 @@ export const deleteUser = (id) => async (dispatch) => {
         }
 
         const { data } = await axios.delete(`/api/delete-user?id=${id}`, config);
-        console.log("user action: ", data.user);  
         
        
               dispatch({
@@ -210,7 +204,6 @@ export const deleteUser = (id) => async (dispatch) => {
            
 
     } catch (error) {
-        console.log("er: ", error.response.data);
         
         dispatch({
             type: DELETE_USER_FAIL,
@@ -235,7 +228,6 @@ export const updateProfile = (userData) => async (dispatch) => {
             }
         }
        
-        console.log("accessToken Account là: ", accessToken);
 
         dispatch({ type: UPDATE_PROFILE_REQUEST })
 
@@ -368,21 +360,29 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
     try {
 
-        let setCookie = (cname, cvalue, minutes) => {
+        let setCookie = (cname, cvalue, minutes, path) => {
             let d = new Date();
             d.setTime(d.getTime() + (minutes*60*1000));
             let expires = "expires="+ d.toUTCString();
-            document.cookie = cname + "=" + cvalue + "; " + expires;
+            let pathc = "path="+ path;
+            document.cookie = cname + "=" + cvalue + "; " + expires + "; " + pathc;
         }
+
+        let cookies = document.cookie;
+        let arrCookies = cookies.split(";");
+
+        for (let index = 0; index < arrCookies.length; index++) {
+            setCookie("accessToken", "", 0, "/");
+            setCookie("accessToken", "", 0, "/admin");
+            setCookie("refreshToken", "", 0, "/");
+            setCookie("refreshToken", "", 0, "/admin");
+        }        
        
         await axios.post('/api/logout')
 
         dispatch({
             type: LOGOUT_SUCCESS,
-        })
-
-        setCookie("accessToken", null);
-        setCookie("refreshToken", null);
+        })       
 
     } catch (error) {
         dispatch({
@@ -408,7 +408,6 @@ export const allUsers = () => async (dispatch) => {
             }
         }
        
-        console.log("accessToken Account là: ", accessToken);
 
         dispatch({ type: ALL_USERS_REQUEST })
 
@@ -449,7 +448,6 @@ export const updateUser = (userData) => async (dispatch) => {
                 break;
               }
             }
-            console.log("accessToken updateUser là: ", accessToken);
         
             dispatch({ type: UPDATE_USER_REQUEST })
         
@@ -491,7 +489,6 @@ export const getUserDetails = (id) => async (dispatch) => {
               }
             }
         
-            console.log("accessToken getUser là: ", accessToken);
         
             dispatch({ type: USER_DETAILS_REQUEST })
         

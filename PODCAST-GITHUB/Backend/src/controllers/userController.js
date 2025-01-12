@@ -14,7 +14,7 @@ let handleLogin = async (req, res) => {
   if (!email || !password) {
     return res.status(500).json({
       errCode: 1,
-      message: "Thiếu dữ liệu đầu vào!",
+      message: "Thiếu dữ liệu!",
     });
   }
 
@@ -28,7 +28,11 @@ let handleLogin = async (req, res) => {
 };
 
 let handleLogout = async (req, res, next) => {
-  res.cookie("accessToken", null, {
+  res.cookie("refreshToken", "", {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+  res.cookie("accessToken", "", {
     expires: new Date(Date.now()),
     httpOnly: true,
   });
@@ -85,34 +89,30 @@ let handleGetAllUsers = async (req, res) => {
 
 let handleGetAccount = async (req, res) => {
   let email = req.user.email;
-  console.log("email là: ", email);
 
   if (email) {
     let data = await userService.getAllUsers(email);
-    console.log("data account là: ", data);
 
     return res.status(200).json(data);
   } else {
     return res.status(200).json({
       errCode: 0,
-      message: "Thiếu dữ liệu đầu vào",
+      message: "Thiếu dữ liệu!",
     });
   }
 };
 
 let handleGetUser = async (req, res) => {
   let id = req.query.id;
-  console.log("id là: ", id);
 
   if (id) {
     let data = await userService.getUser(id);
-    console.log("data account là: ", data);
 
     return res.status(200).json(data);
   } else {
     return res.status(200).json({
       errCode: 0,
-      message: "Thiếu dữ liệu đầu vào",
+      message: "Thiếu dữ liệu!",
     });
   }
 };
@@ -123,7 +123,7 @@ let handleCreateNewUser = async (req, res) => {
   if (!email || !password) {
     return res.status(500).json({
       errCode: 1,
-      message: "Thiếu dữ liệu đầu vào!",
+      message: "Thiếu dữ liệu!",
     });
   }
 
@@ -162,7 +162,7 @@ let handleCreateNewAccount = async (req, res) => {
   if (!email || !password) {
     return res.status(500).json({
       errCode: 1,
-      message: "Thiếu dữ liệu đầu vào!",
+      message: "Thiếu dữ liệu!",
     });
   }
 
@@ -186,7 +186,7 @@ let handleDeleteUser = async (req, res) => {
   if (!req.query.id) {
     return res.status(200).json({
       errCode: 1,
-      message: "Thiếu dữ liệu đầu vào!",
+      message: "Thiếu dữ liệu!",
     });
   }
   let message = await userService.deleteUser(req.query.id);
@@ -208,7 +208,7 @@ let handleEditAccount = async (req, res) => {
   if (!email) {
     return res.status(500).json({
       errCode: 1,
-      message: "Thiếu dữ liệu đầu vào!",
+      message: "Thiếu dữ liệu!",
     });
   }
 
@@ -234,9 +234,6 @@ let handleUpdatePassword = async (req, res) => {
   let id = req.user.id;
   let oldPassword = req.body.oldPassword;
   let password = req.body.password;
-
-  console.log("body update password: ", id, oldPassword, password);
-  
 
   let message = await userService.updatePassword(String(id), oldPassword, password);
   return res.status(200).json(message);

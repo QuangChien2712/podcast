@@ -9,7 +9,6 @@ cloudinary.config({
 
 let handleCreateNewContent = async (req, res) => {
   try {
-    console.log("req.body: ", req.body);
     
     let images = req.body.images.split("CHIEN");
 
@@ -25,7 +24,6 @@ let handleCreateNewContent = async (req, res) => {
       }
     
     let imagesLinksString = imagesLinks.join("CHIEN");
-    console.log("url Content: ", imagesLinksString);
 
     req.body.hinhAnh = imagesLinksString;
 
@@ -36,7 +34,7 @@ let handleCreateNewContent = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from the server",
+      message: "Có lỗi từ máy chủ",
     });
   }
 };
@@ -48,7 +46,7 @@ let handleGetAllContents = async (req, res) => {
     if (!id) {
       return res.status(200).json({
         errCode: 1,
-        message: "Missing required parametters",
+        message: "Thiếu dữ liệu",
         contents: [],
       });
     }
@@ -63,7 +61,7 @@ let handleGetAllContents = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from the server",
+      message: "Có lỗi từ máy chủ",
     });
   }
 };
@@ -77,7 +75,7 @@ let handleGetAllContentsPTSN = async (req, res) => {
     if (!typeRole && !id) {
       return res.status(200).json({
         errCode: 1,
-        message: "Missing required parametters",
+        message: "Thiếu dữ liệu",
         contents: [],
       });
     }
@@ -104,7 +102,7 @@ let handleGetAllContentsPTSN = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from the server",
+      message: "Có lỗi từ máy chủ",
     });
   }
 };
@@ -133,7 +131,6 @@ let handleEditContent = async (req, res) => {
       }
     
     let imagesLinksString = imagesLinks.join("CHIEN");
-    console.log("url Content: ", imagesLinksString);
 
     req.body.hinhAnh = imagesLinksString;
   let data = req.body;
@@ -148,7 +145,7 @@ let handleDeleteContent = async (req, res) => {
   if (!req.query.id) {
     return res.status(200).json({
       errCode: 1,
-      message: "Missing required parametters!",
+      message: "Thiếu dữ liệu!",
     });
   }
   let message = await contentService.handleDeleteContent(req.query.id);

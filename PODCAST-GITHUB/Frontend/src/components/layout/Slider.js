@@ -9,15 +9,6 @@ class Sliderr extends Component {
         className="carousel slide carousel-fade"
         data-ride="carousel"
       >
-        {/*   
-                <div className="carousel-inner">
-                    <div className="carousel-item active">
-                        <img className="d-block w-100" src="https://cdn-crownx.winmart.vn/images/prod/5_f57517d5-2c25-4edb-a372-9bc83971ef1b.jpg" height={500} alt="First slide" />
-                    </div>                   
-                </div>
-
-            */}
-
         <div className="carousel-inner">
           <div className="carousel-item active">
             <img

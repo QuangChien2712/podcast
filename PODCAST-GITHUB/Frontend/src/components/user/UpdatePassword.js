@@ -56,7 +56,7 @@ const UpdatePassword = ({ history }) => {
                     <form className="shadow-lg" onSubmit={submitHandler}>
                         <h1 className="mt-2 mb-5">Thay đổi mật khẩu</h1>
                         <div className="form-group">
-                            <label for="old_password_field">Mật khẩu cũ:</label>
+                            <label for="old_password_field">Mật khẩu cũ</label>
                             <input
                                 type="password"
                                 id="old_password_field"
@@ -67,7 +67,7 @@ const UpdatePassword = ({ history }) => {
                         </div>
 
                         <div className="form-group">
-                            <label for="new_password_field">Mật khẩu mới:</label>
+                            <label for="new_password_field">Mật khẩu mới</label>
                             <input
                                 type="password"
                                 id="new_password_field"

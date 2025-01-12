@@ -117,7 +117,7 @@ let requestRefreshToken = async (req, res) => {
   if (!refreshTokens.includes(refreshToken)) {
     return res
       .status(403)
-      .json({ errCode: 2, errMessage: "RefreshToken không đúng!" });
+      .json({ errCode: 2, errMessage: "Mã khôi phục không đúng!" });
   }
 
   jwt.verify(refreshToken, "nguyennhuquynh-be", (err, user) => {
@@ -176,7 +176,7 @@ let handleUserLogin = (email, password, res) => {
           if (check) {
             if (user.typeRole === "Block") {
               userData.errCode = 2;
-              userData.errMessage = `Tài khoản bị khóa!`;
+              userData.errMessage = `Tài khoản đang bị khóa!`;
             } else {
               const accessToken = generateAccessToken(user);
               const refreshToken = generateRefreshToken(user);
@@ -271,7 +271,7 @@ let getAllUsers = (userId) => {
         } else {
           reslove({
             errCode: 0,
-            message: "User không tồn tại",
+            message: "Tài khoản không tồn tại!",
           });
         }
       }
@@ -306,7 +306,7 @@ let getUser = (userId) => {
         } else {
           reslove({
             errCode: 0,
-            message: "User không tồn tại",
+            message: "Tài khoản không tồn tại!",
           });
         }
       }
@@ -323,7 +323,7 @@ let createNewUser = (data) => {
       if (check === true) {
         resolve({
           errCode: 1,
-          errMessage: "Email đã tồn tại trong hệ thống!",
+          errMessage: "Email đã có trong hệ thống!",
         });
       } else {
         let hashpassword = hashUserPassword(data.password);
@@ -354,7 +354,7 @@ let createNewAccount = (data) => {
       if (check === true) {
         resolve({
           errCode: 1,
-          message: "Email đã tồn tại trong hệ thống!",
+          message: "Email đã có trong hệ thống!",
         });
       } else {
         let hashpassword = hashUserPassword(data.password);
@@ -395,7 +395,7 @@ let deleteUser = (uid) => {
 
       resolve({
         errCode: 0,
-        message: "Tài khoản được xóa thành công!",
+        message: "Đã xóa tài khoản!",
       });
     } catch (error) {
       reject(error);
@@ -409,7 +409,7 @@ let deleteUser = (uid) => {
 //       if (!data.id) {
 //         resolve({
 //           errCode: 2,
-//           message: "Thiếu dữ liệu đầu vào!",
+//           message: "Thiếu dữ liệu!",
 //         });
 //       }
 
@@ -432,7 +432,7 @@ let deleteUser = (uid) => {
 //           });
 //           resolve({
 //             errCode: 0,
-//             message: "Cập nhật tài khoản thành công!",
+//             message: "Đã cập nhật tài khoản!",
 //           });
 //         } else {
 //           let hashpassword = hashUserPassword(data.password);
@@ -448,7 +448,7 @@ let deleteUser = (uid) => {
 //           });
 //           resolve({
 //             errCode: 0,
-//             message: "Cập nhật tài khoản thành công!",
+//             message: "Đã cập nhật tài khoản!",
 //           });
 //         }
 //       } else {
@@ -469,7 +469,7 @@ let updateUserData = (user, data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-          message: "Thiếu dữ liệu đầu vào!",
+          message: "Thiếu dữ liệu!",
         });
       }
 
@@ -487,7 +487,7 @@ let updateUserData = (user, data) => {
           });
           resolve({
             errCode: 0,
-            message: "Cập nhật tài khoản thành công!",
+            message: "Đã cập nhật tài khoản!",
           });
         } else {
           await db.User.upsert({
@@ -498,7 +498,7 @@ let updateUserData = (user, data) => {
           });
           resolve({
             errCode: 0,
-            message: "Cập nhật tài khoản thành công!",
+            message: "Đã cập nhật tài khoản!",
           });
         }
       } else {
@@ -519,7 +519,7 @@ let updateAccountData = (user, data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-          message: "Thiếu dữ liệu đầu vào!",
+          message: "Thiếu dữ liệu!",
         });
       }
 
@@ -541,7 +541,7 @@ let updateAccountData = (user, data) => {
           });
           resolve({
             errCode: 0,
-            message: "Cập nhật tài khoản thành công!",
+            message: "Đã cập nhật tài khoản!",
           });
         }
       } else {
@@ -581,7 +581,6 @@ let updatePassword = (id, oldPassword, password) => {
 
       if (user) {
         let check = await bcrypt.compareSync(oldPassword, user.password);
-        console.log("so sánh pass: ", check);
         
         if (!check) {
           resolve({
@@ -603,7 +602,7 @@ let updatePassword = (id, oldPassword, password) => {
           });
           resolve({
             errCode: 0,
-            message: "Cập nhật mật khẩu thành công!",
+            message: "Đã đổi mật khẩu!",
           });
         }
 

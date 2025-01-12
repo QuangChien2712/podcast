@@ -20,7 +20,6 @@ const PhatTrienSuNghiep = ({ history }) => {
   const { loading, error, contents } = useSelector(
     (state) => state.contentsPTSN
   );
-  console.log("contentsPTSN: ", contents);
 
   
 

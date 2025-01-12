@@ -147,7 +147,7 @@ let handleEditReview = (data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-          message: "Missing required parametters!",
+          message: "Thiếu dữ liệu!",
         });
       }
 
@@ -166,12 +166,12 @@ let handleEditReview = (data) => {
         });
         resolve({
           errCode: 0,
-          message: "Update the Review succeeds!",
+          message: "Thành công!",
         });
       } else {
         resolve({
           errCode: 1,
-          message: `Review isn't found!`,
+          message: `Bình luận không tồn tại!`,
         });
       }
     } catch (error) {
@@ -192,7 +192,7 @@ let handleDeleteReview = (idContent, email, like) => {
       if (!reviewdata) {
         resolve({
           errCode: 2,
-          message: `The review isn't exist`,
+          message: `Bình luận không tồn tại!`,
         });
       }
       // await reviewdata.destroy(); reviewdata phải là instance của sequelize mới destroy được. Vì config query raw = true nên không còn là thể hiện nữa nên phải chọc trực tiếp từ db
@@ -200,7 +200,7 @@ let handleDeleteReview = (idContent, email, like) => {
 
       resolve({
         errCode: 0,
-        message: "Review has been deleted successfully!",
+        message: "Đã xóa bình luận!",
       });
     } catch (error) {
       reject(error);

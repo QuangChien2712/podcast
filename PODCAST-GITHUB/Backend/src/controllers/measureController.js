@@ -8,7 +8,7 @@ let handleCreateNewMeasure = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from the server",
+      message: "Có lỗi từ máy chủ",
     });
   }
 };
@@ -20,7 +20,7 @@ let handleGetAllMeasures = async (req, res) => {
     if (!id) {
       return res.status(200).json({
         errCode: 1,
-        errMessage: "Missing required parametters",
+        errMessage: "Thiếu dữ liệu",
         measures: [],
       });
     }
@@ -35,7 +35,7 @@ let handleGetAllMeasures = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from the server",
+      message: "Có lỗi từ máy chủ",
     });
   }
 };
@@ -50,7 +50,7 @@ let handleDeleteMeasure = async (req, res) => {
   if (!req.query.id) {
     return res.status(200).json({
       errCode: 1,
-      message: "Missing required parametters!",
+      message: "Thiếu dữ liệu!",
     });
   }
   let message = await measureService.handleDeleteMeasure(req.query.id);

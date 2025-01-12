@@ -38,11 +38,6 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
 
   const pathDetails = window.location.pathname;
 
-  console.log("contentsPTSN Details: ", content);
-  console.log("reviews content: ", reviews);
-  console.log("producId: ", contentId);
-
-  
   useEffect(() => {
 
     if(String(content.id) !== contentId){
@@ -106,7 +101,6 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
           listreviews.push(element);
         }        
       }
-      console.log("list cmt: ", listreviews);
       
       setListCommentContens(listreviews);
     }else{
@@ -171,7 +165,6 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
 
   const shareMangXaHoi = ()=>{
     let linkShare = window.location.href;
-    console.log("link ", window.location.href);
   }
 
 

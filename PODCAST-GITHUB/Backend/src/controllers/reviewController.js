@@ -8,7 +8,7 @@ let handleCreateNewReview = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from the server",
+      message: "Có lỗi từ máy chủ",
     });
   }
 };
@@ -20,7 +20,7 @@ let handleGetAllReviews = async (req, res) => {
     if (!id) {
       return res.status(200).json({
         errCode: 1,
-        message: "Missing required parametters",
+        message: "Thiếu dữ liệu",
         reviews: [],
       });
     }
@@ -35,7 +35,7 @@ let handleGetAllReviews = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from the server",
+      message: "Có lỗi từ máy chủ",
     });
   }
 };
@@ -47,7 +47,7 @@ let handleGetReview = async (req, res) => {
     if (!idContent) {
       return res.status(200).json({
         errCode: 1,
-        message: "Missing required parametters",
+        message: "Thiếu dữ liệu",
         reviews: [],
       });
     }
@@ -62,7 +62,7 @@ let handleGetReview = async (req, res) => {
     console.log(error);
     return res.status(200).json({
       errCode: -1,
-      message: "Error from the server",
+      message: "Có lỗi từ máy chủ",
     });
   }
 };
@@ -77,7 +77,7 @@ let handleDeleteReview = async (req, res) => {
   if (!req.query.idContent || !req.query.email || !req.query.like) {
     return res.status(200).json({
       errCode: 1,
-      message: "Missing required parametters!",
+      message: "Thiếu dữ liệu!",
     });
   }
   

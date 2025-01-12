@@ -9,7 +9,7 @@ const verifyToken = (req, res, next) => {
     const accessToken = token.split(" ")[1];
     jwt.verify(accessToken, "voquangchien-be", (err, decode) => {
       if (err) {
-       return res.status(403).json("Token không đúng!");
+       return res.status(403).json("Xác thực không thành công!");
       }
       req.user = decode;
       // console.log("decode: ", decode);
@@ -30,7 +30,7 @@ const verifyTokenAndAuth = (req, res, next) => {
       )) {
       next();
     } else {      
-      return res.status(403).json("Không được phép!");
+      return res.status(403).json("Không có quyền truy cập!");
     }
   });
 };
@@ -40,7 +40,7 @@ const verifyTokenAndIsAdmin = (req, res, next) => {
     if (req.user && (req.user.typeRole === "A")) {
       next();
     } else {
-    return res.status(403).json("Không được phép!");
+    return res.status(403).json("Không có quyền truy cập!");
     }
   });
 };
@@ -50,7 +50,7 @@ const verifyTokenAndIsOwner = (req, res, next) => {
     if (req.user && (req.user.typeRole === "O")) {
       next();
     } else {
-    return res.status(403).json("Không được phép!");
+    return res.status(403).json("Không có quyền truy cập!");
     }
   });
 };

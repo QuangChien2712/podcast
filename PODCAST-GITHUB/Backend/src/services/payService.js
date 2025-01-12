@@ -126,7 +126,7 @@ let handleEditPay = (data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-          errMessage: "Missing required parametters!",
+          errMessage: "Thiếu dữ liệu!",
         });
       }
 

@@ -508,7 +508,7 @@ footer {
 #sidebar {
   min-width: 100%;
   max-width: 100%;
-  background: #232f3e;
+  background: #203162;
   color: #fff;
   transition: all 0.3s;
 }
@@ -519,12 +519,12 @@ footer {
 
 #sidebar .sidebar-header {
   padding: 20px;
-  background: #232f3e;
+  background: #203162;
 }
 
 #sidebar ul.components {
   padding: 5px 0px;
-  border-bottom: 1px solid #232f3e;
+  border-bottom: 1px solid #203162;
 }
 
 #sidebar ul li a {
@@ -536,7 +536,7 @@ footer {
 }
 
 #sidebar ul li a:hover {
-  color: #232f3e;
+  color: #203162;
   background: #fff;
 }
 
@@ -547,7 +547,7 @@ footer {
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
   color: #fff;
-  background: #232f3e;
+  background: #203162;
 }
 
 a[data-toggle="collapse"] {
@@ -565,7 +565,7 @@ a[data-toggle="collapse"] {
 ul ul a {
   font-size: 1rem !important;
   padding-left: 30px !important;
-  background: #232f3e;
+  background: #203162;
 }
 
 ul.CTAs {
@@ -631,7 +631,7 @@ ul.CTAs a {
 }
 
 .footer {
-  background-color: #232f3e;
+  background-color: #203162;
   color: #e3e3e3;
 }
 

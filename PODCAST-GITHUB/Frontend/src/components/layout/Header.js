@@ -15,7 +15,7 @@ const Header = () => {
 
     const logoutHandler = () => {
         dispatch(logout());
-        alert.success('Đăng xuất thành công')
+        alert.success('Đã đăng xuất')
     }
 
     return (
@@ -50,7 +50,10 @@ const Header = () => {
 
                             <div className="dropdown-menu" aria-labelledby="dropDownMenuButton">
                                 
-                                <Link className="dropdown-item" to="/me">Thông tin cá nhân</Link>
+                                <Link className="dropdown-item" to="/">Trang chủ</Link>
+                               
+                                {user.typeRole === "A" && <Link className="dropdown-item" to="/admin/users">Trang quản trị</Link>}
+                                <Link className="dropdown-item" to="/me">Thông tin tài khoản</Link>
                                 <Link className="dropdown-item text-danger" to="/" onClick={logoutHandler}>
                                     Đăng xuất
                                 </Link>
@@ -60,7 +63,7 @@ const Header = () => {
 
                         </div>
 
-                    ) : !loading && <Link to="/login" className="btn ml-4" id="login_btn">Đăng nhập</Link>}
+                    ) : !loading && <Link to="/login" className="btn ml-4" id="login_btn">Login/Register</Link>}
 
 
                 </div>

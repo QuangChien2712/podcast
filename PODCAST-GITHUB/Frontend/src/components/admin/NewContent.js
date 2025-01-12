@@ -52,7 +52,7 @@ const NewContent = ({ history }) => {
         if (success) {
             history.push('/admin/contents');
             // history.push('/admin/content');
-            alert.success('Thêm sản phẩm thành công');
+            alert.success('Đã thêm bài viết');
             dispatch({ type: NEW_CONTENT_RESET })
         }
 

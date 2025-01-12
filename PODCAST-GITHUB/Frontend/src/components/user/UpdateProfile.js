@@ -34,7 +34,7 @@ const UpdateProfile = ({ history }) => {
         }
 
         if (isUpdated) {
-            alert.success('Cập nhật thành công')          
+            alert.success('Thông tin đã được cập nhật')          
 
             // history.push('/me')
             history.goBack()
@@ -87,7 +87,7 @@ const UpdateProfile = ({ history }) => {
                         <h1 className="mt-2 mb-5">Sửa thông tin cá nhân</h1>
 
                         <div className="form-group">
-                            <label htmlFor="email_field">Tên</label>
+                            <label htmlFor="email_field">Họ và tên</label>
                             <input
                                 type="name"
                                 id="name_field"

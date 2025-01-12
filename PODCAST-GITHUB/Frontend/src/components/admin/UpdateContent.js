@@ -19,7 +19,6 @@ const UpdateContent = ({ match, history }) => {
   const dispatch = useDispatch();
   
   const {loading, error, content} = useSelector(state => state.contentDetails);
-  console.log("content component là: ", content);
   
   const {
     error: updateError,
@@ -102,7 +101,7 @@ const UpdateContent = ({ match, history }) => {
 
     if (isUpdated) {
       history.push("/admin/contents");
-      alert.success("Content updated successfully");
+      alert.success("Đã cập nhật bài viết");
       dispatch({ type: UPDATE_CONTENT_RESET });
       window.location.reload();
     }

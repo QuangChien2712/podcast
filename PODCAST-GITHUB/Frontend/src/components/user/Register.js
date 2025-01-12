@@ -125,10 +125,10 @@ const Register = ({ history }) => {
             onSubmit={submitHandler}
             encType="multipart/form-data"
           >
-            <h1 className="mb-3">Đăng ký</h1>
+            <h1 className="mb-3"></h1>
 
             <div className="form-group">
-              <label htmlFor="name_field">Tên</label>
+              <label htmlFor="name_field">Họ và tên</label>
               <input
                 type="name"
                 id="name_field"
@@ -152,7 +152,7 @@ const Register = ({ history }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="email_field">Email</label>
+              <label htmlFor="email_field">Email (*)</label>
               <input
                 type="email"
                 id="email_field"
@@ -164,7 +164,7 @@ const Register = ({ history }) => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password_field">Mật khẩu</label>
+              <label htmlFor="password_field">Mật khẩu (*)</label>
               <input
                 type="password"
                 id="password_field"

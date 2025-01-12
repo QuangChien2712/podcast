@@ -132,7 +132,7 @@
 //       if (!data.id) {
 //         resolve({
 //           errCode: 2,
-//           errMessage: "Missing required parametters!",
+//           errMessage: "Thiếu dữ liệu!",
 //         });
 //       }
 
@@ -422,7 +422,7 @@ let handleEditContent = (data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-          message: "Missing required parametters!",
+          message: "Thiếu dữ liệu!",
         });
       }
 
@@ -444,7 +444,7 @@ let handleEditContent = (data) => {
         });
         resolve({
           errCode: 0,
-          message: "Update the Content succeeds!",
+          message: "Đã cập nhật bài viết!",
           content: {
             id: data.id,
             typeRole: data.typeRole,
@@ -460,7 +460,7 @@ let handleEditContent = (data) => {
       } else {
         resolve({
           errCode: 1,
-          message: `Content isn't found!`,
+          message: `Nội dung không tồn tại!`,
         });
       }
     } catch (error) {
@@ -478,7 +478,7 @@ let handleDeleteContent = (contentId) => {
       if (!contentdata) {
         resolve({
           errCode: 2,
-          message: `The content isn't exist`,
+          message: `Nội dung không tồn tại!`,
         });
       }
       // await contentdata.destroy(); contentdata phải là instance của sequelize mới destroy được. Vì config query raw = true nên không còn là thể hiện nữa nên phải chọc trực tiếp từ db
@@ -486,7 +486,7 @@ let handleDeleteContent = (contentId) => {
 
       resolve({
         errCode: 0,
-        message: "Content has been deleted successfully!",
+        message: "Bài viết đã được xóa!",
       });
     } catch (error) {
       reject(error);

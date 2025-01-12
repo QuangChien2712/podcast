@@ -36,7 +36,7 @@ const ContentsList = ({ history }) => {
         }
 
         if (isDeleted) {
-            alert.success('Content deleted successfully');
+            alert.success('Đã xóa bài viết');
             history.push('/admin/contents');
             dispatch({ type: DELETE_CONTENT_RESET })
         }

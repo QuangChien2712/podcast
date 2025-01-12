@@ -30,7 +30,7 @@ const UsersList = ({ history }) => {
         }
 
         if (isDeleted) {
-            alert.success('User deleted successfully');
+            alert.success('Đã xóa tài khoản');
             history.push('/admin/users');
             dispatch({ type: DELETE_USER_RESET })
         }
@@ -59,7 +59,7 @@ const UsersList = ({ history }) => {
                     sort: 'asc'
                 },
                 {
-                    label: 'Tên người dùng',
+                    label: 'Họ và tên',
                     field: 'name',
                     sort: 'asc'
                 },
