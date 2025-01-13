@@ -1,6 +1,10 @@
 const contentService = require("../services/contentService");
 const cloudinary = require("cloudinary");
 
+// const path = require("path");
+const fs = require("fs");
+// const { decode } = require("html-entities");
+
 cloudinary.config({
   cloud_name: "denvqae4v",
   api_key: "879654272522899",
@@ -66,7 +70,7 @@ let handleGetAllContents = async (req, res) => {
   }
 };
 
-
+// render metatag server
 let handleGetAllContentsPTSN = async (req, res) => {
   try {
     let typeRole = req.query.typeRole; 
@@ -90,7 +94,32 @@ let handleGetAllContentsPTSN = async (req, res) => {
     }
 
     if(id){
+        // OG_IMAGE
+        // OG_URL
+        // OG_TITLE
+        // OG_DESCRIPTION
+      let dataIndex = fs.readFileSync(`D:/DU_AN_QUY/FRONTEND-2/public/index2.html`,
+        { encoding: 'utf8', flag: 'r' });
+
       let contents = await contentService.handleGetAllContentsPTSN(null, id);
+
+      if(contents && contents.id){
+        let urlImage = contents.hinhAnh.split("CHIEN")[1];
+        let urlShare = `http://duanpodcast.shop/phat-trien-su-nghiep/${contents.id}`;
+        let nameTitle = contents.tenBaiViet;
+        let description = contents.moTaNgan;
+
+        dataIndex = dataIndex.replace(/OG_IMAGE/g, urlImage);
+        dataIndex = dataIndex.replace(/OG_URL/g, urlShare);
+        dataIndex = dataIndex.replace(/OG_TITLE/g, nameTitle);
+        dataIndex = dataIndex.replace(/OG_DESCRIPTION/g, description);
+
+        fs.writeFile(`D:/DU_AN_QUY/FRONTEND-2/public/index.html`, dataIndex,  function(err) {
+          if (err) {
+              return console.error(err);
+          }});        
+      }
+
       return res.status(200).json({
         errCode: 0,
         message: "Ok",
@@ -106,6 +135,46 @@ let handleGetAllContentsPTSN = async (req, res) => {
     });
   }
 };
+
+// let handleGetAllContentsPTSN = async (req, res) => {
+//   try {
+//     let typeRole = req.query.typeRole; 
+//     let id = req.query.id;
+
+//     if (!typeRole && !id) {
+//       return res.status(200).json({
+//         errCode: 1,
+//         message: "Thiếu dữ liệu",
+//         contents: [],
+//       });
+//     }
+
+//     if(typeRole){
+//       let contents = await contentService.handleGetAllContentsPTSN(typeRole, null);
+//       return res.status(200).json({
+//         errCode: 0,
+//         message: "Ok",
+//         contents,
+//       });
+//     }
+
+//     if(id){
+//       let contents = await contentService.handleGetAllContentsPTSN(null, id);
+//       return res.status(200).json({
+//         errCode: 0,
+//         message: "Ok",
+//         contents,
+//       });
+//     }    
+    
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(200).json({
+//       errCode: -1,
+//       message: "Có lỗi từ máy chủ",
+//     });
+//   }
+// };
 
 let handleEditContent = async (req, res) => {
   let id = req.body.id;

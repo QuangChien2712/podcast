@@ -94,6 +94,11 @@ const handleTimKiem = (chuoiSearch, data) => {
     }
   };
 
+
+  const reLoad = ()=>{
+    window.location.reload();
+  }
+
   const styleflex = {
     display: "flex",
     flexDirection: "row",
@@ -348,7 +353,7 @@ const handleTimKiem = (chuoiSearch, data) => {
                     
                   }}
                 >
-                  <Link to={`/phat-trien-su-nghiep/${item.id}`}>
+                  <Link onClick={()=>{setTimeout(reLoad, 1000)}} to={`/phat-trien-su-nghiep/${item.id}`}>
                     <img
                       src={item.hinhAnh.split("CHIEN")[1]}
                       style={{ width: "100%", height: "100%" }}
@@ -370,7 +375,7 @@ const handleTimKiem = (chuoiSearch, data) => {
                       backgroundColor: "#203162",
                     }}
                   >
-                    <Link to={`/phat-trien-su-nghiep/${item.id}`}>
+                    <Link onClick={()=>{setTimeout(reLoad, 1000)}} to={`/phat-trien-su-nghiep/${item.id}`}>
                       <span style={{color: "white", fontWeight: "600", fontSize: "30px"}}>{item.tenBaiViet}</span>
                     </Link>
                   </div>

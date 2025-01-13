@@ -13,7 +13,7 @@ import AlertTemplate from 'react-alert-template-basic'
 // import reduxStore, { persistor } from './redux';
 
 const options = {
-  timeout: 5000,
+  timeout: 3000,
   position: positions.BOTTOM_CENTER,
   transition: transitions.SCALE,
 }
@@ -26,21 +26,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
-// ReactDOM.render(
-//   <Provider store={reduxStore}>
-//       <IntlProviderWrapper>
-//           <App persistor={persistor}/>
-//       </IntlProviderWrapper>
-//   </Provider>,
-//   document.getElementById('root')
-// );
-
-// ReactDOM.render(
-//   <Provider store={store} >
-//     <AlertProvider template={AlertTemplate} {...options}>
-//       <App />
-//     </AlertProvider>
-//   </Provider>,
-//   document.getElementById('root')
-// );

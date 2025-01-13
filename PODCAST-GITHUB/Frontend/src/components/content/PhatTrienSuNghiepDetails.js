@@ -14,54 +14,56 @@ import {
   clearErrors,
 } from "../../actions/contentActions";
 
-
 const PhatTrienSuNghiepDetails = ({ match, history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  
+
   const contentId = match.params.id;
-  
+
   const { error: reviewError, success } = useSelector(
     (state) => state.newReview
   );
-  const {loading, error, content } = useSelector(
+  const { loading, error, content } = useSelector(
     (state) => state.contentDetailsPTSN
   );
   const { reviews } = useSelector((state) => state.contentReviews);
   const { isDeleted } = useSelector((state) => state.review);
 
-  const { user } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const [isLike, setIsLike] = useState(false);
   const [openComment, setOpenComment] = useState(false);
   const [comment, setComment] = useState("");
   const [listCommentContent, setListCommentContens] = useState([]);
 
   const pathDetails = window.location.pathname;
+  
 
   useEffect(() => {
-
-    if(String(content.id) !== contentId){
+    if (String(content.id) !== contentId) {
       dispatch(getContentDetailsPTSN(contentId));
       dispatch(getContentReviews(contentId));
-    } 
-    
+    }
 
-      if (reviews && reviews.length > 0 && user) {
-        for (let index = 0; index < reviews.length; index++) {
-          const element = reviews[index];
-          if (element.email === user.email && element.like === "1" && element.idContent === contentId) {
-            setIsLike(true);
-            break;
-          }               
+    if (reviews && reviews.length > 0 && user) {
+      for (let index = 0; index < reviews.length; index++) {
+        const element = reviews[index];
+        if (
+          element.email === user.email &&
+          element.like === "1" &&
+          element.idContent === contentId
+        ) {
+          setIsLike(true);
+          break;
         }
-      }else{
-        setIsLike(false);
-      }   
-
-      if(isDeleted){
-        setIsLike(false);
       }
-    
+    } else {
+      setIsLike(false);
+    }
+
+    if (isDeleted) {
+      setIsLike(false);
+    }
+
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
@@ -72,13 +74,13 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
       dispatch(clearErrors());
     }
 
-    if (success) {
-      dispatch(getContentReviews(content.id));
-      setIsLike(true);
-    }
+    // if (success) {
+    //   dispatch(getContentReviews(content.id));
+    //   setIsLike(true);
+    // }
   }, [
     dispatch,
-    alert, 
+    alert,
     error,
     reviewError,
     success,
@@ -92,21 +94,21 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
     history,
   ]);
 
-  useEffect(()=>{
-    if(reviews && reviews.length > 0){
+  useEffect(() => {
+    if (reviews && reviews.length > 0) {
       let listreviews = [];
       for (let index = 0; index < reviews.length; index++) {
         const element = reviews[index];
-        if(element.comment && element.comment.length > 0){
+        if (element.comment && element.comment.length > 0) {
           listreviews.push(element);
-        }        
+        }
       }
-      
+
       setListCommentContens(listreviews);
-    }else{
+    } else {
       setListCommentContens([]);
-    }    
-  }, [dispatch, reviews])
+    }
+  }, [dispatch, reviews]);
 
   const setArrChuoi = (chuoi, chuoiCat) => {
     let a = chuoi.split(chuoiCat);
@@ -124,48 +126,44 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
     }
   };
 
-  const createLike = () => {       
-      let dataparam = {
-        "like": "1",
-        "comment": null,
-        "share": "0",
-        "idContent": contentId,
-        "email": user.email
-      }      
-      dispatch(newReview(dataparam));
-      setIsLike(true);
-      dispatch(getContentReviews(contentId));
+  const createLike = () => {
+    let dataparam = {
+      like: "1",
+      comment: null,
+      share: "0",
+      idContent: contentId,
+      email: user.email,
+    };
+    dispatch(newReview(dataparam));
+    setIsLike(true);
+    dispatch(getContentReviews(contentId));
   };
 
-  const deleteLike = ()=>{
+  const deleteLike = () => {
     let dataparam = {
-      "like": "1",
-      "idContent": contentId,
-      "email": user.email
-    }      
+      like: "1",
+      idContent: contentId,
+      email: user.email,
+    };
     dispatch(deleteReview(dataparam));
     setIsLike(false);
     dispatch(getContentReviews(contentId));
-  }
+  };
 
-  const createComment = ()=>{
+  const createComment = () => {
     let dataparam = {
-      "like": "0",
-      "comment": comment,
-      "share": "0",
-      "idContent": contentId,
-      "email": user.email
-    }      
+      like: "0",
+      comment: comment,
+      share: "0",
+      idContent: contentId,
+      email: user.email,
+    };
     dispatch(newReview(dataparam));
     setOpenComment(false);
     setComment("");
     dispatch(getContentReviews(contentId));
     window.location.reload();
-  }
-
-  const shareMangXaHoi = ()=>{
-    let linkShare = window.location.href;
-  }
+  };
 
 
   const styleflex = {
@@ -186,8 +184,6 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
 
   return (
     <Fragment>
-      <MetaData title={"Nội dung bài viết"} />
-
       <div className="row">
         <div className="col-12 col-md-12">
           <Fragment>
@@ -322,46 +318,79 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
                   </div>
                 </div>
 
-                {
-                  (openComment || listCommentContent.length > 0)
-                  &&
-                  (<div style={{ ...styleflex, height: `${25 * (listCommentContent.length > 8 ? listCommentContent.length : 8) }px`, marginTop: "20px"}}>
-                    <div className="col-12 col-md-6" >
-                    {listCommentContent && listCommentContent.length > 0 && 
-                      listCommentContent.map((item, index)=>{
-                        return (                      
-                          <div key={index} style={{ ...styleflex, justifyContent: "flex-start" }}>
-                          <div><span style={{color: "red", fontWeight: "600"}}>{item.email}</span></div>
-                          <div><span style={{color: "white"}}>{item.comment}</span></div>
-                          </div>                      
-                        )
-                      })
-                    }
+                {(openComment || listCommentContent.length > 0) && (
+                  <div
+                    style={{
+                      ...styleflex,
+                      height: `${
+                        25 *
+                        (listCommentContent.length > 8
+                          ? listCommentContent.length
+                          : 8)
+                      }px`,
+                      marginTop: "20px",
+                    }}
+                  >
+                    <div className="col-12 col-md-6">
+                      {listCommentContent &&
+                        listCommentContent.length > 0 &&
+                        listCommentContent.map((item, index) => {
+                          return (
+                            <div
+                              key={index}
+                              style={{
+                                ...styleflex,
+                                justifyContent: "flex-start",
+                              }}
+                            >
+                              <div>
+                                <span
+                                  style={{ color: "red", fontWeight: "600" }}
+                                >
+                                  {item.email}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "white" }}>
+                                  {item.comment}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
                     </div>
-                    
-    
+
                     {openComment && (
-                      <div className="col-12 col-md-6" style={{...styleflex, justifyContent: "flex-end"}}>
-                      <div className="col-12 col-md-6" style={{padding: "0px 0px 15px 21px"}}>
-                      <div className="form-group">
-                      
-                      <textarea
-                        className="form-control"
-                        id="comment"
-                        rows="5"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                      ></textarea>
-                    </div>
-                    <button onClick={()=>{createComment()}} className="btn-primary" >Gửi</button>
-                      </div>
+                      <div
+                        className="col-12 col-md-6"
+                        style={{ ...styleflex, justifyContent: "flex-end" }}
+                      >
+                        <div
+                          className="col-12 col-md-6"
+                          style={{ padding: "0px 0px 15px 21px" }}
+                        >
+                          <div className="form-group">
+                            <textarea
+                              className="form-control"
+                              id="comment"
+                              rows="5"
+                              value={comment}
+                              onChange={(e) => setComment(e.target.value)}
+                            ></textarea>
+                          </div>
+                          <button
+                            onClick={() => {
+                              createComment();
+                            }}
+                            className="btn-primary"
+                          >
+                            Gửi
+                          </button>
+                        </div>
                       </div>
                     )}
-    
-                    </div>)
-                }
-
-
+                  </div>
+                )}
 
                 <div
                   style={{
@@ -403,15 +432,14 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
                           src="https://res.cloudinary.com/denvqae4v/image/upload/v1736013297/like_pmmg2w.png"
                         ></img>
                       </Link>
-                    ) :
-                    (isLike ? (
+                    ) : isLike ? (
                       <img
                         style={{
                           height: "12%",
                           width: "12%",
                           marginLeft: "15px",
                           cursor: "pointer",
-                          borderRadius: "20px"
+                          borderRadius: "20px",
                         }}
                         onClick={() => {
                           deleteLike();
@@ -424,60 +452,55 @@ const PhatTrienSuNghiepDetails = ({ match, history }) => {
                           height: "20%",
                           width: "20%",
                           marginLeft: "15px",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                         onClick={() => {
                           createLike();
                         }}
                         src="https://res.cloudinary.com/denvqae4v/image/upload/v1736013297/like_pmmg2w.png"
                       ></img>
-                    ))}
-
-
-
+                    )}
 
                     {!user ? (
                       <Link to="/login">
-                      <img
-                      style={{
-                        height: "100%",
-                        width: "100%",
-                        marginLeft: "15px",
-                      }}
-                      src="https://res.cloudinary.com/denvqae4v/image/upload/v1736013296/binh_luan_difhdo.png"
-                    ></img>
+                        <img
+                          style={{
+                            height: "100%",
+                            width: "100%",
+                            marginLeft: "15px",
+                          }}
+                          src="https://res.cloudinary.com/denvqae4v/image/upload/v1736013296/binh_luan_difhdo.png"
+                        ></img>
                       </Link>
                     ) : (
                       <img
-                      onClick={()=>{setOpenComment(!openComment);
-
-                      }}
-                      style={{
-                        height: "25%",
-                        width: "25%",
-                        marginLeft: "15px",
-                        cursor: "pointer"
-                      }}
-                      src="https://res.cloudinary.com/denvqae4v/image/upload/v1736013296/binh_luan_difhdo.png"
-                    ></img>
+                        onClick={() => {
+                          setOpenComment(!openComment);
+                        }}
+                        style={{
+                          height: "25%",
+                          width: "25%",
+                          marginLeft: "15px",
+                          cursor: "pointer",
+                        }}
+                        src="https://res.cloudinary.com/denvqae4v/image/upload/v1736013296/binh_luan_difhdo.png"
+                      ></img>
                     )}
-
-                    
-                    <img
-                      style={{
-                        height: "25%",
-                        width: "25%",
-                        marginLeft: "15px",
-                      }}
-                      onClick={()=>{shareMangXaHoi()}}
-                      src="https://res.cloudinary.com/denvqae4v/image/upload/v1736013296/chia_se_t0jz5d.png"
-                    ></img>
                   </div>
                 </div>
               </div>
             )}
           </Fragment>
         </div>
+      </div>
+
+      <div style={{ ...styleflex, justifyContent: "flex-end" }}>
+        <div
+          style={{ marginTop: "-105px", marginRight: "70px" }}
+          className="fb-share-button"
+          data-href={window.location.href}
+          data-layout="button_count"
+        ></div>
       </div>
     </Fragment>
   );
