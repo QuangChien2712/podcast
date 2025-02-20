@@ -42,6 +42,7 @@ const Profile = () => {
                             </Link>
                         </div>
                     </div>
+                    <div style={{height: "100px"}}></div>
                 </Fragment>
             )}
         </Fragment>

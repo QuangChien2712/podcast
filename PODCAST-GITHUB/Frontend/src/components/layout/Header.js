@@ -1,75 +1,151 @@
-import React, { Fragment } from 'react'
-import { Route, Link } from 'react-router-dom'
+import React, { Fragment, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAlert } from 'react-alert';
+import { logout } from '../../actions/userActions';
+import logo from '../../assets/images/logo/TheoO2.svg';
+import SearchInput from '../SearchInPut';
+import Home from '../Home';
+import { Link } from "react-router-dom";
+import './Header.css';
 
-import { useDispatch, useSelector } from 'react-redux'
-import { useAlert } from 'react-alert'
-import { logout } from '../../actions/userActions'
+const Header = ({history}) => {
+	const alert = useAlert();
+	const dispatch = useDispatch();
+	const location = useLocation();
 
-import '../../App.css'
+	const { user, loading } = useSelector((state) => state.auth);
+	const [menuOpen, setMenuOpen] = useState(false);
+	const [showSearch, setShowSearch] = useState(false);
 
-const Header = () => {
-    const alert = useAlert();
-    const dispatch = useDispatch();
+	const toggleMenu = () => setMenuOpen(!menuOpen);
 
-    const { user, loading } = useSelector(state => state.auth)
+	const logoutHandler = () => {
+		dispatch(logout());
+		alert.success('Đã đăng xuất');
+	};
 
-    const logoutHandler = () => {
-        dispatch(logout());
-        alert.success('Đã đăng xuất')
-    }
+	const menuItems = [
+		{ name: "THEO'O BLOG", idSection: '/blog' },
+		{ name: 'PHÁT TRIỂN SỰ NGHIỆP', idSection: 'career' },
+		{ name: 'CÂN BẰNG CUỘC SỐNG', idSection: 'balance' },
+		{ name: 'PODCAST', idSection: 'podcast' },
+		{ name: 'ĐẶT LỊCH HẸN 1-1', idSection: 'appointment' },
+		{ name: 'BỘ CÔNG CỤ', idSection: 'tools' },
+		{ name: 'LIÊN HỆ', idSection: 'contact' },
+	];
 
-    return (
-        <Fragment>
-            <nav className="navbar row">
-                <div className="col-12 col-md-3">
-                    <div className="navbar-brand">
-                        
-                    </div>
-                </div>
+	const searchPaths = ['/blog1', '/blog2', '/career', '/balance', '/podcast'];
 
-                <div className="col-12 col-md-6 mt-2 mt-md-0">
-                    
-                </div>
+	useEffect(() => {
+		if (searchPaths.some((path) => location.pathname.includes(path))) {
+			setShowSearch(true);
+		} else {
+			setShowSearch(false);
+		}
+	}, [searchPaths, location.pathname]);
 
-                <div className="col-12 col-md-2 mt-4 mt-md-0 text-center">
-                    
+	const handleOnClick = (item) => {
+			const targetSection = document.getElementById(`section-${item.idSection}`);
+			if (targetSection) {
+				const offsetTop = targetSection.getBoundingClientRect().top + window.scrollY - 96; // Trừ chiều cao header (96px)
+				window.scrollTo({
+					top: offsetTop,
+					behavior: 'smooth',
+				});
+			} else {
+				console.error(`Section with id section-${item.idSection} not found`);
+			}		
+	};
 
-                    {user ? (
-                        <div className="ml-4 dropdown d-inline">
-                            <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	return (
+		<Fragment>
+			<header className="fixed top-0 left-0 w-full z-50 bg-gray-800 text-white">
+				<div style={{height: "60px"}} className="container mx-auto flex items-center justify-between py-3 px-4">
+					
+				{/* Mobile Navigation */}
+				{menuOpen && (
+					<div className="md:hidden bg-gray-900 py-1 px-3 khoang_cach_tren">
+						{menuItems.map((item, index) => (
+							index === 0 ? (<Link to="/"><div className="thanh_menu block text-lg font-medium mt-3 hover:text-gray-400 cursor-pointer">{item.name}</div></Link>) : 
+								<div								
+								key={index}
+								onClick={() => handleOnClick(item)}
+								className="thanh_menu block text-lg font-medium mt-3 hover:text-gray-400 cursor-pointer"
+							>
+								{item.name}
+							</div>
+							
+							
+						))}
+					</div>
+				)}
 
-                                <figure className="avatar avatar-nav">
-                                    <img
-                                        src={user.avatar && user.avatar.split("CHIEN")[1]}
-                                        alt={user && user.name}
-                                        className="rounded-circle"
-                                    />
-                                </figure>
-                                <span>{user && user.name}</span>
-                            </Link>
+				
 
-                            <div className="dropdown-menu" aria-labelledby="dropDownMenuButton">
-                                
-                                <Link className="dropdown-item" to="/">Trang chủ</Link>
-                               
-                                {user.typeRole === "A" && <Link className="dropdown-item" to="/admin/users">Trang quản trị</Link>}
-                                <Link className="dropdown-item" to="/me">Thông tin tài khoản</Link>
-                                <Link className="dropdown-item text-danger" to="/" onClick={logoutHandler}>
-                                    Đăng xuất
-                                </Link>
+					{/* Search Input */}
+					{!showSearch && !menuOpen && <SearchInput/>}
 
-                            </div>
+					{/* Navigation */}
+					<nav className="hidden md:flex space-x-6">
+						{menuItems.map((item, index) => (
+							<div
+								key={index}
+								onClick={() => handleOnClick(item)}
+								className="text-sm font-medium hover:text-gray-400 transition-colors"
+							>
+								{item.name}
+							</div>
+						))}
+					</nav>
 
+					{/* Mobile Menu Button */}
+					<button className="md:hidden flex items-center focus:outline-none" onClick={toggleMenu}>
+						{menuOpen ? (
+							<svg
+								className="w-7 h-7"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
+									d="M6 18L18 6M6 6l12 12"
+								/>
+							</svg>
+						) : (
+							<svg
+								className="w-7 h-7"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
+									d="M4 6h16M4 12h16M4 18h16"
+								/>
+							</svg>
+						)}
+					</button>
 
-                        </div>
+					{/* Logo */}
+					<img
+						src={logo}
+						alt="Logo"
+						className="w-16 h-16 object-cover hover:scale-105 transition-transform duration-300"
+					/>
+				</div>
 
-                    ) : !loading && <Link to="/login" className="btn ml-4" id="login_btn">Login/Register</Link>}
+				
+			</header>
+		</Fragment>
+	);
+};
 
-
-                </div>
-            </nav>
-        </Fragment>
-    )
-}
-
-export default Header
+export default Header;

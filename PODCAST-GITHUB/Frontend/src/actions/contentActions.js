@@ -225,6 +225,7 @@ export const getContentDetails = (id) => async (dispatch) => {
     };
 
     const { data } = await axios.get(`/api/get-all-contents?id=${id}`, config);
+    
 
     if (data && data.contents && data.contents.tenBaiViet) {
       dispatch({
@@ -246,7 +247,7 @@ export const getContentDetailsPTSN = (id) => async (dispatch) => {
     dispatch({ type: CONTENT_DETAILS_REQUESTPTSN });
 
     const { data } = await axios.get(`/api/get-all-contents-ptsn?id=${id}`);
-
+    
     if (data && data.contents) {
       dispatch({
         type: CONTENT_DETAILS_SUCCESSPTSN,

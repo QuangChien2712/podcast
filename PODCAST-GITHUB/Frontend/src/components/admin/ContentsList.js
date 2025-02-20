@@ -158,6 +158,7 @@ const ContentsList = ({ history }) => {
 
             <div className="row">
                 <div className="col-12 col-md-2">
+                    
                     <Sidebar />
                 </div>
 

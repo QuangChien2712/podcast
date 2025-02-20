@@ -1,0 +1,70 @@
+import React from 'react';
+import CommentSection from './CommentSection';
+import ContentSection from './NoiDungSection';	
+	
+const ArticleDetail = ({ image, title, content, author, publishedAt, comments }) => {
+	
+
+	return (
+		<div className="max-w-4xl mx-auto p-6 bg-white border border-gray-200 md:rounded-lg shadow-md">
+			{/* Hình ảnh bài viết */}
+			<img src={image} alt={title} className="w-full h-80 object-cover rounded-lg mb-6" />
+
+			{/* Tiêu đề bài viết */}
+			<h1 className="text-3xl font-bold text-gray-900 mb-4">{title}</h1>
+
+			{/* Thông tin bài viết */}
+			<div className="flex items-center justify-between text-sm text-gray-500">
+				<div className="flex items-center space-x-4">
+					<p>
+						By <span className="font-medium text-gray-900">{author}</span>
+					</p>
+					<div className="flex items-center space-x-2">
+						{/* Icon tym */}
+						<button className="flex items-center text-gray-500 hover:text-red-500" aria-label="Like">
+							<svg
+								className="w-5 h-5"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+							</svg>
+							<span className="ml-1">0</span>
+						</button>
+						{/* Icon share */}
+						<button className="flex items-center text-gray-500 hover:text-blue-500 ml-3" aria-label="Share">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="currentColor"
+								className="w-5 h-5"
+							>
+								<path
+									fill-rule="evenodd"
+									d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z"
+									clip-rule="evenodd"
+								/>
+							</svg>
+							<span className="ml-2">Share</span>
+						</button>
+					</div>
+				</div>
+				<p>{"Ngày tạo: " + publishedAt}</p>
+			</div>
+
+			{/* Nội dung bài viết */}
+			{/*<div className="prose max-w-none text-gray-700 leading-7 mt-4 mb-8">{content}</div>*/}
+			
+			<div className="mb-28">
+				{content ? <ContentSection contents={content} /> : <span></span>}
+			</div>
+
+			<div className="mb-28">
+				<CommentSection comments={comments} />
+			</div>
+		</div>
+	);
+};
+
+export default ArticleDetail;

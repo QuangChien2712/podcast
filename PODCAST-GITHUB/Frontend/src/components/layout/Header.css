@@ -1,0 +1,43 @@
+.thanh_menu {
+    max-width: 200px;
+}
+
+.khoang_cach_tren {
+    margin-top: 375px;
+}
+
+@media all and (max-width: 320px) {
+    .thanh_menu {
+        max-width: 300px;
+    }
+ }
+
+ @media all and (max-width: 480px) {
+    .thanh_menu {
+        max-width: 460px;
+    }
+ }
+
+ @media all and (max-width: 600px) {
+    .thanh_menu {
+        max-width: 580px;
+    }
+ }
+
+ @media all and (max-width: 800px) {
+    .thanh_menu {
+        max-width: 780px;
+    }
+ }
+
+ @media all and (max-width: 768px) {
+    .thanh_menu {
+        max-width: 748px;
+    }
+ }
+
+ @media all and (max-width: 1024px) {
+    .thanh_menu {
+        max-width: 1000px;
+    }
+ }

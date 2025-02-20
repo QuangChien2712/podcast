@@ -364,7 +364,7 @@ let handleGetAllContentsPTSN = (typeRole, id) => {
         contents = await db.Content.findAll({
           where: { typeRole: typeRole },
           attributes: {
-            exclude: ["typeRole", "createdAt", "updatedAt"],
+            exclude: ["typeRole"],
           },
         });
         
@@ -398,7 +398,7 @@ let handleGetAllContentsPTSN = (typeRole, id) => {
         contents = await db.Content.findAll({
           where: { id: id },
           attributes: {
-            exclude: ["thuTuHienThi", "typeRole", "createdAt", "updatedAt"],
+            exclude: ["thuTuHienThi", "typeRole"],
           },
         });
 

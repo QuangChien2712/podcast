@@ -139,7 +139,9 @@ const UpdateProfile = ({ history }) => {
                         </div>
 
                         <button type="submit" className="btn update-btn btn-block mt-4 mb-3" disabled={loading ? true : false} >Xác nhận</button>
-                    </form>
+                   
+                        <div style={{height: "100px"}}></div>
+                        </form>
                 </div>
             </div>
         </Fragment>

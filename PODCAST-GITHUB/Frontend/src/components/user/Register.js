@@ -1,243 +1,226 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from 'react';
 
-import MetaData from "../layout/MetaData";
-import Loader from "../layout/Loader";
+import MetaData from '../layout/MetaData';
+import Loader from '../layout/Loader';
 
-import { useAlert } from "react-alert";
-import { useDispatch, useSelector } from "react-redux";
-import { register, clearErrors } from "../../actions/userActions";
-import store from "../../store";
-import { loadUser } from "../../actions/userActions";
+import { useAlert } from 'react-alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { register, clearErrors } from '../../actions/userActions';
+import store from '../../store';
+import { loadUser } from '../../actions/userActions';
 
 const Register = ({ history }) => {
-  const [user, setUser] = useState({
-    name: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-  });
+	const alert = useAlert();
+	const dispatch = useDispatch();
+	const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg');
+	const { isAuthenticated, error, loading } = useSelector((state) => state.auth);
+	const redirect = isAuthenticated ? '/' : window.location.pathname;
 
-  const { name, phoneNumber, email, password } = user;
+	useEffect(() => {
+		if (isAuthenticated) {
+			history.goBack();
+		}
+		// history.push(redirect);
 
-  const [images, setImages] = useState("");
-  const [imagesPreviews, setImagesPreviews] = useState("");
+		if (error) {
+			alert.error(error);
+			dispatch(clearErrors());
+		}
+	}, [dispatch, alert, isAuthenticated, error, history, redirect]);
 
-  const [avatar, setAvatar] = useState("");
-  const [avatarPreview, setAvatarPreview] = useState(
-    "/images/default_avatar.jpg"
-  );
+	// Albert
+	const [formData, setFormData] = useState({
+		name: '',
+		phoneNumber: '',
+		email: '',
+		password: '',
+		confirmPassword: '',
+		avatar: '',
+	});
 
-  const alert = useAlert();
-  const dispatch = useDispatch();
+	const handleChange = (e) => {
+		if (e.target.name === 'avatar') {
+			const file = e.target.files[0];
+			if (!file) {
+				alert.error('Vui lòng chọn ảnh hợp lệ!');
+				return;
+			}
 
-  const { isAuthenticated, error, loading } = useSelector(
-    (state) => state.auth
-  );
+			const reader = new FileReader();
+			reader.onload = () => {
+				if (reader.readyState === 2) {
+					setAvatarPreview(reader.result);
+					setFormData({ ...formData, avatar: reader.result });
+				}
+			};
+			reader.readAsDataURL(file);
+		} else {
+			setFormData({ ...formData, [e.target.name]: e.target.value });
+		}
+	};
 
-  const redirect = isAuthenticated ? "/" : window.location.pathname;
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (!formData.name.trim()) {
+			alert.error('Tên không được để trống!');
+			return;
+		}
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      history.goBack();
-    }
-    // history.push(redirect);
+		if (formData.password !== formData.confirmPassword) {
+			alert.error('Mật khẩu xác nhận không khớp!');
+			return;
+		}
 
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
-  }, [dispatch, alert, isAuthenticated, error, history, redirect]);
+		// console.log('Form Data:', formData);
+		const { name, phoneNumber, email, password, avatar } = formData;
+		const registrationData = { name, phoneNumber, email, password, avatar };
+		dispatch(register(registrationData));
+	};
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+	return (
+		<Fragment>
+			<MetaData title={'Đăng ký'} />
 
-    const formData = new FormData();
-    formData.set("name", name);
-    formData.set("phoneNumber", phoneNumber);
-    formData.set("email", email);
-    formData.set("password", password);
-    // formData.set("images", images);
-    formData.set("avatar", avatar);
+			<div className="min-h-screen flex items-center justify-center bg-gray-100">
+				<div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg mt-32 mb-20">
+					<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Register</h2>
+					<form onSubmit={handleSubmit}>
+						{/* Name Field */}
+						<div className="mb-4">
+							<label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+								Họ và tên
+							</label>
+							<input
+								type="text"
+								id="name"
+								name="name"
+								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+								placeholder="Nhập họ và tên"
+								value={formData.name}
+								onChange={handleChange}
+								required
+							/>
+						</div>
 
-    dispatch(register(formData));
-  };
+						{/* Email Field */}
+						<div className="mb-4">
+							<label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+								Email
+							</label>
+							<input
+								type="email"
+								id="email"
+								name="email"
+								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+								placeholder="you@example.com"
+								value={formData.email}
+								onChange={handleChange}
+								required
+							/>
+						</div>
 
-  const previewImages = () => {
-    return [...imagesPreviews].map((image) => (
-      <div>
-        <img src={URL.createObjectURL(image)} width="20px" height="20px" />
-      </div>
-    ));
-  };
+						{/* PhoneNumber Field */}
+						<div className="mb-4">
+							<label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+								Số điện thoại
+							</label>
+							<input
+								type="tel"
+								id="phoneNumber"
+								name="phoneNumber"
+								pattern="^[0-9]{10}$"
+								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+								placeholder="Nhập số điện thoại"
+								value={formData.phoneNumber}
+								onChange={handleChange}
+								required
+							/>
+						</div>
 
-  // const onChange = (e) => {
-  //   if (e.target.name === "images") {
+						{/* Image field */}
+						<div className="mb-6">
+							<label htmlFor="avatar_upload" className="block text-sm font-medium text-gray-700 mb-2">
+								Hình nền
+							</label>
+							<div className="flex flex-col sm:flex-row items-center sm:space-x-4">
+								{/* Vùng hiển thị ảnh */}
+								<div className="flex-shrink-0">
+									<figure className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border border-gray-300">
+										<img src={avatarPreview} className="object-cover w-full h-full" alt="Ảnh nền" />
+									</figure>
+								</div>
 
-  //     let files = e.target.files;
-  //     setImagesPreviews(files);
-  //     let arrayImagesString = [];
+								{/* Input chọn ảnh */}
+								<div className="mt-4 sm:mt-0 w-full">
+									<input
+										type="file"
+										name="avatar"
+										className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+										id="customFile"
+										accept="image/*"
+										onChange={handleChange}
+									/>
+									<label htmlFor="customFile" className="block text-sm text-gray-500 mt-1">
+										Chọn ảnh
+									</label>
+								</div>
+							</div>
+						</div>
 
-  //     for (let i = 0; i < files.length; i++) {
-  //       (function (file) {
-  //         let reader = new FileReader();
-  //         reader.onload = (file) => {
-  //           arrayImagesString.push(reader.result);
+						{/* Password Field */}
+						<div className="mb-4">
+							<label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+								Mật khẩu
+							</label>
+							<input
+								type="password"
+								id="password"
+								name="password"
+								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+								placeholder="Nhập mật khẩu"
+								value={formData.password}
+								onChange={handleChange}
+								required
+							/>
+						</div>
 
-  //           let imagesString = arrayImagesString.join("CHIEN");
+						{/* Confirm Password Field */}
+						<div className="mb-6">
+							<label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+								Xác nhận mật khẩu
+							</label>
+							<input
+								type="password"
+								id="confirmPassword"
+								name="confirmPassword"
+								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+								placeholder="Nhập lại mật khẩu"
+								value={formData.confirmPassword}
+								onChange={handleChange}
+								required
+							/>
+						</div>
 
-  //           if(i === files.length - 1){
-  //               setImages(imagesString);
-  //           }
-  //         };
-  //         reader.readAsDataURL(file);
-  //       })(files[i]);
-  //     }
-  //   } else {
-  //     setUser({ ...user, [e.target.name]: e.target.value });
-  //   }
-  // };
+						{/* Submit Button */}
+						<button
+							type="submit"
+							className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+						>
+							Đăng ký
+						</button>
+					</form>
 
-  const onChange = (e) => {
-    if (e.target.name === "avatar") {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setAvatarPreview(reader.result);
-          setAvatar(reader.result);
-        }
-      };
-
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    }
-  };
-
-  return (
-    <Fragment>
-      <MetaData title={"Đăng ký"} />
-
-      <div className="row wrapper">
-        <div className="col-10 col-lg-5">
-          <form
-            className="shadow-lg"
-            onSubmit={submitHandler}
-            encType="multipart/form-data"
-          >
-            <h1 className="mb-3"></h1>
-
-            <div className="form-group">
-              <label htmlFor="name_field">Họ và tên</label>
-              <input
-                type="name"
-                id="name_field"
-                className="form-control"
-                name="name"
-                value={name}
-                onChange={onChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="phone_field">Số điện thoại</label>
-              <input
-                type="text"
-                id="phone_field"
-                className="form-control"
-                name="phoneNumber"
-                value={phoneNumber}
-                onChange={onChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email_field">Email (*)</label>
-              <input
-                type="email"
-                id="email_field"
-                className="form-control"
-                name="email"
-                value={email}
-                onChange={onChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password_field">Mật khẩu (*)</label>
-              <input
-                type="password"
-                id="password_field"
-                className="form-control"
-                name="password"
-                value={password}
-                onChange={onChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="avatar_upload">Hình nền</label>
-              <div className="d-flex align-items-center">
-                <div>
-                  <figure className="avatar mr-3 item-rtl">
-                    <img
-                      src={avatarPreview}
-                      className="rounded-circle"
-                      alt="Ảnh nền"
-                    />
-                  </figure>
-                </div>
-
-                {/*
-                <div className="custom-file">
-                  <input
-                    type="file"
-                    multiple
-                    name="images"
-                    className="custom-file-input"
-                    id="customFile"
-                    accept="images/*"
-                    onChange={onChange}
-                  />
-                  <label className="custom-file-label" htmlFor="customFile">
-                    Chọn ảnh
-                  </label>
-                </div>
-                {previewImages()}
-                */}
-
-                <div className="custom-file">
-                  <input
-                    type="file"
-                    name="avatar"
-                    className="custom-file-input"
-                    id="customFile"
-                    accept="images/*"
-                    onChange={onChange}
-                  />
-                  <label className="custom-file-label" htmlFor="customFile">
-                    Chọn ảnh
-                  </label>
-                </div>
-              </div>
-            </div>
-            {loading ? (
-              <Loader />
-            ) : (
-              <button
-                id="register_button"
-                type="submit"
-                className="btn btn-block py-3"
-                disabled={loading ? true : false}
-              >
-                ĐĂNG KÝ
-              </button>
-            )}
-          </form>
-        </div>
-      </div>
-    </Fragment>
-  );
+					{/* Already have an account */}
+					<div className="text-sm text-center text-gray-600 mt-4">
+						Bạn đã có tài khoản?{' '}
+						<a href="/login" className="text-blue-500 hover:underline">
+							Đăng nhập
+						</a>
+					</div>
+				</div>
+			</div>
+		</Fragment>
+	);
 };
 
 export default Register;
