@@ -18,7 +18,7 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
   const contentId = match.params.id;
-  
+
   const { error: reviewError, success } = useSelector(
     (state) => state.newReview
   );
@@ -32,16 +32,16 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
   const [listCommentContent, setListCommentContens] = useState([]);
 
   console.log("comment: ", listCommentContent);
-  
-  useEffect(() => {	
-    if ((String(content.id) !== contentId) || !match.params.id) {
+
+  useEffect(() => {
+    if (String(content.id) !== contentId || !match.params.id) {
       dispatch(getContentDetailsPTSN(contentId));
       dispatch(getContentReviews(contentId));
     }
 
-	if(!Number(contentId)){
-		history.goBack();
-	}
+    if (!Number(contentId)) {
+      history.goBack();
+    }
 
     if (error) {
       alert.error(error);
@@ -58,23 +58,22 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
     error,
     reviewError,
     success,
-    contentId,   
+    contentId,
     content.id,
     match.params.id,
-    history
+    history,
   ]);
 
   useEffect(() => {
     let listreviews = [];
-    if (reviews && reviews.length > 0) {      
+    if (reviews && reviews.length > 0) {
       for (let index = 0; index < reviews.length; index++) {
         const element = reviews[index];
         if (element.comment && element.comment.length > 0) {
           listreviews.push(element);
           setListCommentContens(listreviews);
           console.log("list reviews: ", listreviews);
-          
-        }        
+        }
       }
       setListCommentContens(listreviews);
     } else {
@@ -111,47 +110,49 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
 
   const initialComments = [
     {
-        "id": "113",
-        "idContent": "18",
-        "email": "cvoquang@gmail.com",
-        "like": "0",
-        "comment": "sdada",
-        "share": "0"
+      id: "113",
+      idContent: "18",
+      email: "cvoquang@gmail.com",
+      like: "0",
+      comment: "sdada",
+      share: "0",
     },
     {
-        "id": "128",
-        "idContent": "18",
-        "email": "cvoquang@gmail.com",
-        "like": "0",
-        "comment": "đfdfdf",
-        "share": "0"
+      id: "128",
+      idContent: "18",
+      email: "cvoquang@gmail.com",
+      like: "0",
+      comment: "đfdfdf",
+      share: "0",
     },
     {
-        "id": "134",
-        "idContent": "18",
-        "email": "buiquangquy@gmail.com",
-        "like": "0",
-        "comment": "a",
-        "share": "0"
+      id: "134",
+      idContent: "18",
+      email: "buiquangquy@gmail.com",
+      like: "0",
+      comment: "a",
+      share: "0",
     },
     {
-        "id": "135",
-        "idContent": "18",
-        "email": "buiquangquy@gmail.com",
-        "like": "0",
-        "comment": "b",
-        "share": "0"
-    }    
-];
+      id: "135",
+      idContent: "18",
+      email: "buiquangquy@gmail.com",
+      like: "0",
+      comment: "b",
+      share: "0",
+    },
+  ];
 
   return (
     <>
-      <div className="mt-28 ml-8">
+      <div className="mt-4 ml-8">
         <Breadcrumb items={breadcrumbItems} />
       </div>
 
       <ArticleDetail
-        image={content && content.hinhAnh ? content.hinhAnh.split("CHIEN")[1] : ""}
+        image={
+          content && content.hinhAnh ? content.hinhAnh.split("CHIEN")[1] : ""
+        }
         title={content.tenBaiViet}
         content={content.noiDung}
         author={"Theo"}

@@ -18,7 +18,7 @@ const DemoArticleDetailPTSN = ({ match, history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
   const contentId = match.params.id;
-  
+
   const { error: reviewError, success } = useSelector(
     (state) => state.newReview
   );
@@ -31,16 +31,15 @@ const DemoArticleDetailPTSN = ({ match, history }) => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const [listCommentContent, setListCommentContens] = useState([]);
 
-  
-  useEffect(() => {	
-    if ((String(content.id) !== contentId) || !match.params.id) {
+  useEffect(() => {
+    if (String(content.id) !== contentId || !match.params.id) {
       dispatch(getContentDetailsPTSN(contentId));
       dispatch(getContentReviews(contentId));
     }
 
-	if(!Number(contentId)){
-		history.goBack();
-	}
+    if (!Number(contentId)) {
+      history.goBack();
+    }
 
     if (error) {
       alert.error(error);
@@ -57,21 +56,21 @@ const DemoArticleDetailPTSN = ({ match, history }) => {
     error,
     reviewError,
     success,
-    contentId,   
+    contentId,
     content.id,
     match.params.id,
-    history
+    history,
   ]);
 
   useEffect(() => {
     let listreviews = [];
-    if (reviews && reviews.length > 0) {      
+    if (reviews && reviews.length > 0) {
       for (let index = 0; index < reviews.length; index++) {
         const element = reviews[index];
         if (element.comment && element.comment.length > 0) {
           listreviews.push(element);
           setListCommentContens(listreviews);
-        }        
+        }
       }
       setListCommentContens(listreviews);
     } else {
@@ -93,12 +92,14 @@ const DemoArticleDetailPTSN = ({ match, history }) => {
 
   return (
     <>
-      <div className="mt-28 ml-8">
+      <div className="mt-4 ml-8">
         <Breadcrumb items={breadcrumbItems} />
       </div>
 
       <ArticleDetail
-        image={content && content.hinhAnh ? content.hinhAnh.split("CHIEN")[1] : ""}
+        image={
+          content && content.hinhAnh ? content.hinhAnh.split("CHIEN")[1] : ""
+        }
         title={content.tenBaiViet}
         content={content.noiDung}
         author={"Theo"}
