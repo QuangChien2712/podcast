@@ -40,9 +40,6 @@ const Login = ({ history, location }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log('Email:', email);
-		console.log('Password:', password);
-
 		// Handle login logic here
 		e.preventDefault();
 		dispatch(login(email, password));

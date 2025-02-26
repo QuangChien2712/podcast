@@ -22,7 +22,7 @@ const BlogCBCS = () => {
 
   useEffect(() => {
     dispatch(getAdminContentsPTSN("HM2"));
-  }, [dispatch, alert, error]);
+  }, []);
 
   const handleTimKiem = (chuoiSearch, data) => {
     let listResult = [];

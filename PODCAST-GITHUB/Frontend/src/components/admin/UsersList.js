@@ -23,7 +23,9 @@ const UsersList = ({ history }) => {
 
     useEffect(() => {
         dispatch(allUsers());
+    }, [])
 
+    useEffect(() => {
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
@@ -42,8 +44,9 @@ const UsersList = ({ history }) => {
      }
 
      const deleteUserHandler = (id) => {     
-             dispatch(deleteUser(id))
-         }
+        dispatch(deleteUser(id));
+        window.location.reload();
+    }
 
     const setUsers = () => {
         const data = {

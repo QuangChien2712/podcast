@@ -20,9 +20,9 @@ const BlogPTSN = () => {
     (state) => state.contentsPTSN
   );
 
-  useEffect(() => {
-    dispatch(getAdminContentsPTSN("HM1"));
-  }, [dispatch, alert, error]);
+  useEffect(() => {   
+   dispatch(getAdminContentsPTSN("HM1"));
+  }, []);
 
   const handleTimKiem = (chuoiSearch, data) => {
     let listResult = [];

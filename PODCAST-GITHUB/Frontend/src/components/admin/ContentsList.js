@@ -21,10 +21,11 @@ const ContentsList = ({ history }) => {
     const [idDelete, setIdDelete] = useState("")
 
     useEffect(() => {
-        
-        dispatch(getAdminContents());
-        
+    dispatch(getAdminContents());
+    }, [])
 
+    useEffect(() => {
+        
         if (error) {
             alert.error(error);
             dispatch(clearErrors())
@@ -48,7 +49,8 @@ const ContentsList = ({ history }) => {
      }
 
      const deleteContentHandler = (id) => {     
-        dispatch(deleteContent(id))
+        dispatch(deleteContent(id));
+        window.location.reload();
     }
 
     const setContents = () => {
@@ -103,48 +105,53 @@ const ContentsList = ({ history }) => {
             rows: []
         }
 
-        contents.forEach(content => {
-            data.rows.push({
-                id: content.id,
-                typeRole: content.typeRole,
-                chuDe: content.chuDe,
-                tenBaiViet: content.tenBaiViet,
-                moTaNgan: content.moTaNgan,
-                noiDung: content.noiDung,
-                audio: content.audio,
-                thuTuHienThi: content.thuTuHienThi,
-                actions: <Fragment>
-                    <Link to={`/admin/content/${content.id}`} className="btn btn-primary py-1 px-2">
-                        <i className="fa fa-pencil"></i>
-                    </Link>
-                    <button onClick={() => handleIdDelete(content.id)}  className="btn btn-danger py-1 px-2 ml-2" data-toggle="modal" data-target="#exampleModal" >
-                        <i className="fa fa-trash"></i>
-                    </button>
-                    {/* model delete */}
-                    <div>
-                        <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title" id="exampleModalLabel">XÓA BÀI VIẾT</h5>
-                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                    </div>
-                                    <div className="modal-body">
-                                        Xóa vĩnh viễn bài viết?
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                        <button type="button" className="btn btn-danger" onClick={() => deleteContentHandler(idDelete)} data-dismiss="modal">Xóa</button>
+       
+        if(contents && contents.length > 0){
+            contents.forEach(content => {
+                data.rows.push({
+                    id: content.id,
+                    typeRole: content.typeRole,
+                    chuDe: content.chuDe,
+                    tenBaiViet: content.tenBaiViet,
+                    moTaNgan: content.moTaNgan,
+                    noiDung: content.noiDung,
+                    audio: content.audio,
+                    thuTuHienThi: content.thuTuHienThi,
+                    actions: <Fragment>
+                        <Link to={`/admin/content/${content.id}`} className="btn btn-primary py-1 px-2">
+                            <i className="fa fa-pencil"></i>
+                        </Link>
+                        <button onClick={() => handleIdDelete(content.id)}  className="btn btn-danger py-1 px-2 ml-2" data-toggle="modal" data-target="#exampleModal" >
+                            <i className="fa fa-trash"></i>
+                        </button>
+                        {/* model delete */}
+                        <div>
+                            <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title" id="exampleModalLabel">XÓA BÀI VIẾT</h5>
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div className="modal-body">
+                                            Xóa vĩnh viễn bài viết?
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                            <button type="button" className="btn btn-danger" onClick={() => deleteContentHandler(idDelete)} data-dismiss="modal">Xóa</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </Fragment>
+                    </Fragment>
+                })
             })
-        })
+        } 
+        
+      
 
         return data;
     }

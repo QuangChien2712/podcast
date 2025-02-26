@@ -31,7 +31,6 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const [listCommentContent, setListCommentContens] = useState([]);
 
-  console.log("comment: ", listCommentContent);
 
   useEffect(() => {
     if (String(content.id) !== contentId || !match.params.id) {
@@ -72,7 +71,6 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
         if (element.comment && element.comment.length > 0) {
           listreviews.push(element);
           setListCommentContens(listreviews);
-          console.log("list reviews: ", listreviews);
         }
       }
       setListCommentContens(listreviews);
