@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
 import { logout } from "../../actions/userActions";
@@ -143,12 +143,62 @@ const Header = ({ history }) => {
           </nav>
 
           {/* Logo */}
-          <img
-            onClick={() => (window.location.href = "/")}
-            src={logo}
-            alt="Logo"
-            className="w-10 h-10 object-cover hover:scale-105 transition-transform duration-300"
-          />
+          {user ? (
+            <div className="w-10 h-10 object-cover hover:scale-105 transition-transform duration-300">
+              <Link
+                to="#!"
+                className="btn dropdown-toggle text-white mr-4"
+                type="button"
+                id="dropDownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <figure className="avatar avatar-nav">
+                  <img
+                    src={user.avatar && user.avatar.split("CHIEN")[1]}
+                    alt={user && user.name}
+                    className="rounded-circle"
+                  />
+                </figure>
+                <span>{user && user.name}</span>
+              </Link>
+
+              <div
+                className="dropdown-menu"
+                aria-labelledby="dropDownMenuButton"
+              >
+                <Link className="dropdown-item" to="/">
+                  Trang chủ
+                </Link>
+
+                {user.typeRole === "A" && (
+                  <Link className="dropdown-item" to="/admin/users">
+                    Trang quản trị
+                  </Link>
+                )}
+                <Link className="dropdown-item" to="/me">
+                  Thông tin tài khoản
+                </Link>
+                <Link
+                  className="dropdown-item text-danger"
+                  to="/"
+                  onClick={logoutHandler}
+                >
+                  Đăng xuất
+                </Link>
+              </div>
+            </div>
+          ) : (
+            !loading && (
+              <img
+                onClick={() => (window.location.href = "/")}
+                src={logo}
+                alt="Logo"
+                className="w-10 h-10 object-cover hover:scale-105 transition-transform duration-300"
+              />
+            )
+          )}
         </div>
       </header>
     </Fragment>

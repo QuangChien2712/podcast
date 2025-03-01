@@ -109,7 +109,7 @@ const NewContent = ({ history }) => {
                 <div className="col-12 col-md-10">
                     <Fragment>
                         <div className="wrapper my-2">
-                            <form className="shadow-lg" onSubmit={submitHandler} encType='multipart/form-data'>
+                            <form className="shadow-lg" onSubmit={submitHandler} encType='application/json'>
                                 <h1 className="mb-4">Thêm bài viết mới</h1>
 
                                 <div className="form-group">

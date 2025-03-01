@@ -40,6 +40,7 @@ const ContentsList = ({ history }) => {
             alert.success('Đã xóa bài viết');
             history.push('/admin/contents');
             dispatch({ type: DELETE_CONTENT_RESET })
+
         }
 
     }, [dispatch, alert, error, deleteError, isDeleted, history])
@@ -48,9 +49,13 @@ const ContentsList = ({ history }) => {
         setIdDelete(id);
      }
 
-     const deleteContentHandler = (id) => {     
-        dispatch(deleteContent(id));
+     const reLoad = ()=>{
         window.location.reload();
+     }
+
+     const deleteContentHandler = (id) => {  
+        dispatch(deleteContent(id));
+        setTimeout(reLoad, 50);
     }
 
     const setContents = () => {

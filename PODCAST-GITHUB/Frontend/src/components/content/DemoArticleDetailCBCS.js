@@ -31,7 +31,6 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const [listCommentContent, setListCommentContens] = useState([]);
 
-
   useEffect(() => {
     if (String(content.id) !== contentId || !match.params.id) {
       dispatch(getContentDetailsPTSN(contentId));
@@ -154,7 +153,7 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
         title={content.tenBaiViet}
         content={content.noiDung}
         author={"Theo"}
-        publishedAt={"01/01/2025"}
+        publishedAt={String(content.createdAt).substring(0, 10)}
         comments={listCommentContent}
       />
     </>
