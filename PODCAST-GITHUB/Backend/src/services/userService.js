@@ -165,6 +165,7 @@ let handleUserLogin = (email, password, res) => {
             "typeRole",
             "phoneNumber",
             "isSchedule",
+            "description",
             "createdAt",
           ],
           where: { email: email },
@@ -335,6 +336,7 @@ let createNewUser = (data) => {
           typeRole: data.typeRole,
           phoneNumber: data.phoneNumber,
           isSchedule: data.isSchedule,
+          description: data.description
         });
         resolve({
           errCode: 0,
@@ -366,6 +368,7 @@ let createNewAccount = (data) => {
           typeRole: "K",
           phoneNumber: data.phoneNumber,
           isSchedule: "No",
+          description: "No"
         });
         resolve({
           errCode: 0,
@@ -538,6 +541,7 @@ let updateAccountData = (user, data) => {
             email: data.email,
             name: data.name,
             avatar: data.avatar,
+            description: data.description
           });
           resolve({
             errCode: 0,
@@ -599,6 +603,7 @@ let updatePassword = (id, oldPassword, password) => {
             typeRole: user.typeRole,
             phoneNumber: user.phoneNumber,
             isSchedule: user.isSchedule,
+            description: user.description
           });
           resolve({
             errCode: 0,

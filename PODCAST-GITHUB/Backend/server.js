@@ -44,9 +44,9 @@ const path = require("path");
 
 
 
-app.use(express.json({limit: '1000000mb'}));
-app.use(express.urlencoded({ limit: "1000000mb", extended: true }));
-app.use(fileUpload({limit: '1000000000000mb'}));
+app.use(express.json({limit: '100mb'}));
+app.use(express.urlencoded({ limit: "100mb", extended: true }));
+app.use(fileUpload({limit: '100mb', extended: true}));
 // app.use(cors());
 app.use(morgan("combined"));
 

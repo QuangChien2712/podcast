@@ -15,14 +15,23 @@ const BlogPTSN = () => {
   const [chuoiTimKiem, setChuoiTimKiem] = useState("");
   const [listResultSearch, setListResultSearch] = useState([]);
   const [isOpenResultSearch, setIsOpenResultSearch] = useState(false);
+  const [contentsSearchPTSN, setContentsSearchPTSN] = useState([]);
+  const [searchPTSN, setSearchPTSN] = useState("");
 
   const { loading, error, contents } = useSelector(
     (state) => state.contentsPTSN
   );
 
-  useEffect(() => {   
-   dispatch(getAdminContentsPTSN("HM1"));
+  const { contentsSPTSN } = useSelector((state) => state.contentsSPTSN);
+
+  useEffect(() => {
+    dispatch(getAdminContentsPTSN("HM1"));
   }, []);
+
+  useEffect(() => {
+    setContentsSearchPTSN(contentsSPTSN.ketQuaTimKiem);
+    setSearchPTSN(contentsSPTSN.chuoiTimKiem);
+  }, [contentsSPTSN]);
 
   const handleTimKiem = (chuoiSearch, data) => {
     let listResult = [];
@@ -62,20 +71,46 @@ const BlogPTSN = () => {
       <div className="mt-4 ml-8">
         <Breadcrumb items={breadcrumbItems} />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-6 p-6">
-        {contents &&
-          contents.length > 0 &&
-          contents.map((item) => (
-            <Link to={`/blog1/${item.id}`}>
-              <NewsItem
-                key={item.id}
-                image={item.hinhAnh.split("CHIEN")[1]}
-                title={item.tenBaiViet}
-                description={item.moTaNgan}
-              />
-            </Link>
-          ))}
-      </div>
+
+      {searchPTSN && searchPTSN.length > 0 ? (
+        contentsSearchPTSN && contentsSearchPTSN.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-6 p-6">
+            {contentsSearchPTSN.map((item) => (
+              <Link to={`/blog1/${item.id}`}>
+                <NewsItem
+                  key={item.id}
+                  image={item.hinhAnh.split("CHIEN")[1]}
+                  title={item.tenBaiViet}
+                  description={item.moTaNgan}
+                />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-4 ml-8">
+            Không có kết quả tìm kiếm theo từ khóa
+            <span style={{ fontSize: "20px", fontWeight: "700" }}>
+              {" "}
+              "{searchPTSN}"
+            </span>
+          </div>
+        )
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center gap-6 p-6">
+          {contents &&
+            contents.length > 0 &&
+            contents.map((item) => (
+              <Link to={`/blog1/${item.id}`}>
+                <NewsItem
+                  key={item.id}
+                  image={item.hinhAnh.split("CHIEN")[1]}
+                  title={item.tenBaiViet}
+                  description={item.moTaNgan}
+                />
+              </Link>
+            ))}
+        </div>
+      )}
       <div className="block mb-20"></div>
     </>
   );

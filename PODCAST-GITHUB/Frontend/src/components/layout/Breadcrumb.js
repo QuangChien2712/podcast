@@ -32,7 +32,7 @@ const Breadcrumb = ({ items }) => {
 						{item.href ? (
 							<a
 								href={item.href}
-								className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-orange-600"
+								className="inline-flex leading-7 items-center text-sm font-medium text-gray-700 hover:text-orange-600"
 							>
 								{/* Icon nếu có */}
 								{item.icon && (

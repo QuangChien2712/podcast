@@ -1,5 +1,6 @@
 const contentService = require("../services/contentService");
 const cloudinary = require("cloudinary");
+const sharp = require("sharp");
 
 // const path = require("path");
 const fs = require("fs");
@@ -12,19 +13,36 @@ cloudinary.config({
 });
 
 let handleCreateNewContent = async (req, res) => {
-  try {
-    
+  try {    
+        
     let images = req.body.images.split("CHIEN");
-
     
       let imagesLinks = [];
     
       for (let i = 0; i < images.length; i++) {
-        const result = await cloudinary.v2.uploader.upload(images[i], {
-          folder: "podcast",
-        });
-        imagesLinks.push(result.public_id);
-        imagesLinks.push(result.secure_url);
+        if(images[i]){
+
+          // let buffer = Buffer.from(images[i], 'base64');
+          // let quality = 80;
+          // do {
+          //   buffer = await sharp(buffer).resize({width: 1024}).toFormat('jpeg').jpeg({quality: quality, chromaSubsampling: '4:4:4', force: true}).toBuffer();
+          //   quality = quality - 5;
+          // } while (buffer.length > 1024*1024 && quality > 10);
+
+          // console.log("buffer là: ", buffer);
+
+          // const data = buffer.toString("base64");
+          // const result = await cloudinary.v2.uploader.upload(`data:image/jpeg;base64,${data}`,
+          //   { folder: "podcast"}
+          //  );  
+
+          const result = await cloudinary.v2.uploader.upload(images[i].toString(),
+            { folder: "podcast"}
+           );   
+
+          imagesLinks.push(result.public_id);
+          imagesLinks.push(result.secure_url);
+        }        
       }
     
     let imagesLinksString = imagesLinks.join("CHIEN");

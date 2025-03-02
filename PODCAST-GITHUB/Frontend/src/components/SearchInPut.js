@@ -1,6 +1,39 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchContentsPTSN, getAdminContentsPTSN } from '../actions/contentActions';
+
+
 
 const SearchInput = ({ onSearch }) => {
+	const dispatch = useDispatch();
+
+	const [chuoiTimKiem, setChuoiTimKiem] = useState("");
+	const [listResultSearch, setListResultSearch] = useState([]);
+
+	const { contents } = useSelector(
+		(state) => state.contentsPTSN
+	  );
+
+	  useEffect(() => {   
+		
+		if(window.location.pathname === "/blog1"){
+			dispatch(getAdminContentsPTSN("HM1"));
+			
+		}
+		if(window.location.pathname === "/blog2"){
+			dispatch(getAdminContentsPTSN("HM2"));
+		}
+		}, [window.location.pathname]);
+
+		useEffect(() => {   
+			dispatch(setSearchContentsPTSN({
+				"chuoiTimKiem": chuoiTimKiem,
+				"ketQuaTimKiem": listResultSearch
+			}));
+		   }, [listResultSearch, chuoiTimKiem]);
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const query = event.target.elements.search.value;
@@ -8,6 +41,25 @@ const SearchInput = ({ onSearch }) => {
 			onSearch(query);
 		}
 	};
+
+	const handleTimKiem = (chuoiSearch, data) => {
+		// console.log("contentPTSNhhhh: ", contents);
+		// console.log("contentCBCShhhh: ", contents);
+			let listResult = [];
+			let UpCase = "";
+			let LoCase = "";
+		
+			for (let i = 0; i < data.length; i++) {
+			  let element = data[i].noiDung.concat(data[i].tenBaiViet);
+			  UpCase = chuoiSearch.toUpperCase();
+			  LoCase = chuoiSearch.toLowerCase();
+			  if (element.includes(chuoiSearch) || element.includes(UpCase) || element.includes(LoCase)) {
+				listResult.push(data[i]);
+			  }
+			}
+			setChuoiTimKiem(chuoiSearch);
+			setListResultSearch(listResult);
+		  };
 
 	return (
 		// <form onSubmit={handleSubmit} className="flex items-center space-x-2 px-4 py-2 max-w-md mx-auto">
@@ -66,6 +118,7 @@ const SearchInput = ({ onSearch }) => {
 					id="default-search"
 					className="block w-full px-6 py-3 text-sm text-gray-700 border border-gray-300 rounded-lg shadow-sm bg-white focus:ring-blue-500 focus:border-blue-500 outline-none placeholder-gray-400 transition duration-200 ease-in-out"
 					placeholder="Tìm kiếm nội dung..."
+					onChange={(e) => handleTimKiem(e.target.value, contents)}
 					required
 				/>
 				{/* <!-- Button --> */}

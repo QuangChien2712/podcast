@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import { contentsReducer, contentsReducerPTSN, newContentReducer, contentReducer, contentDetailsReducer, contentDetailsReducerPTSN, newReviewReducer, contentReviewsReducer, reviewReducer } from './reducers/contentReducers'
+import { contentsReducer, contentsReducerPTSN, newContentReducer, contentReducer, contentDetailsReducer, contentDetailsReducerPTSN, newReviewReducer, contentReviewsReducer, reviewReducer, searchContentsPTSN } from './reducers/contentReducers'
 import { authReducer, userReducer, forgotPasswordReducer, allUsersReducer, userDetailsReducer } from './reducers/userReducers'
 
 // import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
@@ -35,7 +35,9 @@ const reducer = combineReducers({
     allUsers: allUsersReducer,
     userDetails: userDetailsReducer,
     forgotPassword: forgotPasswordReducer,
-    newReview: newReviewReducer
+    newReview: newReviewReducer,
+
+    contentsSPTSN: searchContentsPTSN,
 })
 
 

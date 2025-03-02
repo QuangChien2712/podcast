@@ -1,17 +1,15 @@
 import React from 'react';
 import CommentSection from './CommentSection';
-import ContentSection from './NoiDungSection';	
-	
-const ArticleDetail = ({ image, title, content, author, publishedAt, comments }) => {
-	
+import ContentSection from './NoiDungSection';
 
+const ArticleDetail = ({ image, title, content, author, publishedAt, comments }) => {
 	return (
 		<div className="max-w-4xl mx-auto p-6 bg-white border border-gray-200 md:rounded-lg shadow-md">
 			{/* Hình ảnh bài viết */}
 			<img src={image} alt={title} className="w-full h-80 object-cover rounded-lg mb-6" />
 
 			{/* Tiêu đề bài viết */}
-			<h1 className="text-3xl font-bold text-gray-900 mb-4">{title}</h1>
+			<h1 className="text-2xl font-bold text-gray-900 mb-4">{title}</h1>
 
 			{/* Thông tin bài viết */}
 			<div className="flex items-center justify-between text-sm text-gray-500">
@@ -30,7 +28,7 @@ const ArticleDetail = ({ image, title, content, author, publishedAt, comments })
 							>
 								<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
 							</svg>
-							<span className="ml-1">0</span>
+							<span className="ml-1">Like</span>
 						</button>
 						{/* Icon share */}
 						<button className="flex items-center text-gray-500 hover:text-blue-500 ml-3" aria-label="Share">
@@ -50,17 +48,15 @@ const ArticleDetail = ({ image, title, content, author, publishedAt, comments })
 						</button>
 					</div>
 				</div>
-				<p>{"Ngày tạo: " + publishedAt}</p>
+				<p>{publishedAt}</p>
 			</div>
 
 			{/* Nội dung bài viết */}
 			{/*<div className="prose max-w-none text-gray-700 leading-7 mt-4 mb-8">{content}</div>*/}
-			
-			<div className="mb-28">
-				{content ? <ContentSection contents={content} /> : <span></span>}
-			</div>
 
-			<div className="mb-28">
+			<div className="mt-2 mb-28">{content ? <ContentSection contents={content} /> : <span></span>}</div>
+
+			<div className="mb-24">
 				<CommentSection comments={comments} />
 			</div>
 		</div>

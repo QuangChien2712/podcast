@@ -1,319 +1,288 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from 'react';
 
-import MetaData from "../layout/MetaData";
-import Sidebar from "./Sidebar";
+import MetaData from '../layout/MetaData';
+import Sidebar from './Sidebar';
 
-import { useAlert } from "react-alert";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getContentDetails,
-  updateContent,
-  clearErrors,
-} from "../../actions/contentActions";
-import { UPDATE_CONTENT_RESET } from "../../constants/contentConstants";
+import { useAlert } from 'react-alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContentDetails, updateContent, clearErrors } from '../../actions/contentActions';
+import { UPDATE_CONTENT_RESET } from '../../constants/contentConstants';
 
 const UpdateContent = ({ match, history }) => {
-  const contentId = match.params.id;
+	const contentId = match.params.id;
 
-  const alert = useAlert();
-  const dispatch = useDispatch();
-  
-  const {loading, error, content} = useSelector(state => state.contentDetails);
-  
-  const {
-    error: updateError,
-    isUpdated,
-  } = useSelector((state) => state.content);
-  
+	const alert = useAlert();
+	const dispatch = useDispatch();
 
-  const [typeRole, setTypeRole] = useState("");
-  const [chuDe, setChuDe] = useState("");
-  const [noiDung, setNoiDung] = useState("");
-  const [tenBaiViet, setTenBaiViet] = useState("");
-  const [moTaNgan, setMoTaNgan] = useState("");
-  const [audio, setAudio] = useState("");
-  const [thuTuHienThi, setThuTuHienThi] = useState("");
+	const { loading, error, content } = useSelector((state) => state.contentDetails);
 
-  const [images, setImages] = useState([]);  
-  const [oldImages, setOldImages] = useState([]);
-  const [imagesPreview, setImagesPreview] = useState([]);
+	const { error: updateError, isUpdated } = useSelector((state) => state.content);
 
-  const typeRoles = [
-    {
-      label: "--- Chọn danh mục ---",
-      value: "Chọn"
-  },
-    {
-        label: "Phát triển sự nghiệp",
-        value: "HM1"
-    },
-    {
-        label: "Cân bằng cuộc sống",
-        value: "HM2"
-    }
-]
-  
-  
+	const [typeRole, setTypeRole] = useState('');
+	const [chuDe, setChuDe] = useState('');
+	const [noiDung, setNoiDung] = useState('');
+	const [tenBaiViet, setTenBaiViet] = useState('');
+	const [moTaNgan, setMoTaNgan] = useState('');
+	const [audio, setAudio] = useState('');
+	const [thuTuHienThi, setThuTuHienThi] = useState('');
 
-  useEffect(() => {   
-    if(content && !content.id){
-      dispatch(getContentDetails(contentId));
-    }
-    
-    if(content && content.id &&  String(content.id) !== contentId){
-      dispatch(getContentDetails(contentId))  
-    }    
+	const [images, setImages] = useState([]);
+	const [oldImages, setOldImages] = useState([]);
+	const [imagesPreview, setImagesPreview] = useState([]);
 
-    if(content && content.id && String(content.id) === contentId){
-      setTypeRole(content.typeRole);
-      setTenBaiViet(content.tenBaiViet);
-      setChuDe(content.chuDe);
-      setMoTaNgan(content.moTaNgan);
-      setNoiDung(content.noiDung);
-      setAudio(content.audio);
-      setThuTuHienThi(content.thuTuHienThi);
-  
-      let arrL = content.hinhAnh;
+	const typeRoles = [
+		{
+			label: '--- Chọn danh mục ---',
+			value: 'Chọn',
+		},
+		{
+			label: 'Phát triển sự nghiệp',
+			value: 'HM1',
+		},
+		{
+			label: 'Cân bằng cuộc sống',
+			value: 'HM2',
+		},
+	];
 
-      let arrLinkImages = arrL.split("CHIEN");
-      let arrUrlImages = [];
-      for (let index = 0; index < arrLinkImages.length; index++) {
-        const element = arrLinkImages[index];
-        if (index % 2 === 1) {
-          arrUrlImages.push(element);
-        }
-      }
-  
-      setOldImages(arrUrlImages);
-      setImages(arrUrlImages)
-    }
-    
-   
-    if (error) {
-      alert.error(error);
-      dispatch(clearErrors());
-    }
+	const reLoad = ()=>{
+        window.location.reload();
+     }
 
-    if (updateError) {
-      alert.error(updateError);
-      dispatch(clearErrors());
-    }
+	useEffect(() => {
+		if (content && !content.id) {
+			dispatch(getContentDetails(contentId));
+		}
 
-    if (isUpdated) {
-      history.push("/admin/contents");
-      alert.success("Đã cập nhật bài viết");
-      dispatch({ type: UPDATE_CONTENT_RESET });
-      window.location.reload();
-    }
-  }, [
-    dispatch,
-    alert,
-    error,
-    updateError,
-    isUpdated,    
-    contentId,
-    content,
-    history
-  ]);
+		if (content && content.id && String(content.id) !== contentId) {
+			dispatch(getContentDetails(contentId));
+		}
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
+		if (content && content.id && String(content.id) === contentId) {
+			setTypeRole(content.typeRole);
+			setTenBaiViet(content.tenBaiViet);
+			setChuDe(content.chuDe);
+			setMoTaNgan(content.moTaNgan);
+			setNoiDung(content.noiDung);
+			setAudio(content.audio);
+			setThuTuHienThi(content.thuTuHienThi);
 
-    formData.set("typeRole", typeRole);
-    formData.set("tenBaiViet", tenBaiViet);
-    formData.set("chuDe", chuDe);
-    formData.set("moTaNgan", moTaNgan);
-    formData.set("noiDung", noiDung);
-    formData.set("audio", audio);
-    formData.set("thuTuHienThi", thuTuHienThi);
-    formData.set("images", images.join("CHIEN"));
-    formData.set("id", content.id);
+			let arrL = content.hinhAnh;
 
-    // images.forEach(image => {
-    //     formData.append('images', image)
-    // })
-    dispatch(updateContent(formData));
-  };
+			let arrLinkImages = arrL.split('CHIEN');
+			let arrUrlImages = [];
+			for (let index = 0; index < arrLinkImages.length; index++) {
+				const element = arrLinkImages[index];
+				if (index % 2 === 1) {
+					arrUrlImages.push(element);
+				}
+			}
 
-  
-  const onChange = (e) => {
-    const files = Array.from(e.target.files);
+			setOldImages(arrUrlImages);
+			setImages(arrUrlImages);
+		}
 
-    setImagesPreview([]);
-    setImages([]);
-    setOldImages([]);
+		if (error) {
+			alert.error(error);
+			dispatch(clearErrors());
+		}
 
-    files.forEach((file) => {
-      const reader = new FileReader();
+		if (updateError) {
+			alert.error(updateError);
+			dispatch(clearErrors());
+		}
 
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImagesPreview((oldArray) => [...oldArray, reader.result]);
-          setImages((oldArray) => [...oldArray, reader.result]);
-        }
-      };
+		if (isUpdated) {			
+			alert.success('Cập nhật bài viết thành công');
+			history.push('/admin/contents');
+			dispatch({ type: UPDATE_CONTENT_RESET });
+			// window.location.reload();
+			setTimeout(reLoad, 1000);
+		}
+	}, [dispatch, alert, error, updateError, isUpdated, contentId, content, history]);
 
-      reader.readAsDataURL(file);
-    });
-  };
+	const submitHandler = (e) => {
+		e.preventDefault();
+		const formData = new FormData();
 
-  return (
-    <Fragment>
-      <MetaData title={"Update Content"} />
-      <div className="row">
-        <div className="col-12 col-md-2">
-          <Sidebar />
-        </div>
+		formData.set('typeRole', typeRole);
+		formData.set('tenBaiViet', tenBaiViet);
+		formData.set('chuDe', chuDe);
+		formData.set('moTaNgan', moTaNgan);
+		formData.set('noiDung', noiDung);
+		formData.set('audio', audio);
+		formData.set('thuTuHienThi', thuTuHienThi);
+		formData.set('images', images.join('CHIEN'));
+		formData.set('id', content.id);
 
-        <div className="col-12 col-md-10">
-          <Fragment>
-            <div className="wrapper my-5">
-              <form
-                className="shadow-lg"
-                onSubmit={submitHandler}
-                encType="multipart/form-data"
-              >
-                <h1 className="mb-4">Cập nhật nội dung</h1>
-                
-                <div className="form-group">
-                  <label htmlFor="typeRole">Danh mục bài viết</label>
-                  <select
-                    className="form-control"
-                    id="typeRole"
-                    value={typeRole}
-                    onChange={(e) => setTypeRole(e.target.value)}
-                  >
-                    {typeRoles.map((typeRole) => (
-                      <option key={typeRole.value} value={typeRole.value}>
-                        {typeRole.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+		// images.forEach(image => {
+		//     formData.append('images', image)
+		// })
+		dispatch(updateContent(formData));
+	};
 
-                <div className="form-group">
-                  <label htmlFor="tenBaiViet">Tên bài viết</label>
-                  <input
-                    type="text"
-                    id="tenBaiViet"
-                    className="form-control"
-                    value={tenBaiViet}
-                    onChange={(e) => setTenBaiViet(e.target.value)}
-                  />
-                </div>
+	const onChange = (e) => {
+		const files = Array.from(e.target.files);
 
-                <div className="form-group">
-                  <label htmlFor="chuDe">Chủ đề</label>
-                  <input
-                    type="text"
-                    id="chuDe"
-                    className="form-control"
-                    value={chuDe}
-                    onChange={(e) => setChuDe(e.target.value)}
-                  />
-                </div>
+		setImagesPreview([]);
+		setImages([]);
+		setOldImages([]);
 
-                <div className="form-group">
-                  <label htmlFor="moTaNgan">Mô tả ngắn</label>
-                  <textarea
-                    className="form-control"
-                    id="moTaNgan"
-                    rows="3"
-                    value={moTaNgan}
-                    onChange={(e) => setMoTaNgan(e.target.value)}
-                  ></textarea>
-                </div>
+		files.forEach((file) => {
+			const reader = new FileReader();
 
-                <div className="form-group">
-                  <label htmlFor="noiDung">Nội dung</label>
-                  <textarea
-                    className="form-control"
-                    id="noiDung"
-                    rows="8"
-                    value={noiDung}
-                    onChange={(e) => setNoiDung(e.target.value)}
-                  ></textarea>
-                </div>
+			reader.onload = () => {
+				if (reader.readyState === 2) {
+					setImagesPreview((oldArray) => [...oldArray, reader.result]);
+					setImages((oldArray) => [...oldArray, reader.result]);
+				}
+			};
 
-                <div className="form-group">
-                  <label htmlFor="audio">Audio</label>
-                  <input
-                    type="text"
-                    id="audio"
-                    className="form-control"
-                    value={audio}
-                    onChange={(e) => setAudio(e.target.value)}
-                  />
-                </div>
+			reader.readAsDataURL(file);
+		});
+	};
 
-                <div className="form-group">
-                  <label htmlFor="thuTuHienThi">Thứ tự hiển thị</label>
-                  <input
-                    type="text"
-                    id="thuTuHienThi"
-                    className="form-control"
-                    value={thuTuHienThi}
-                    onChange={(e) => setThuTuHienThi(e.target.value)}
-                  />
-                </div>
+	return (
+		<Fragment>
+			<MetaData title="Cập nhật nội dung" />
+			<div className="flex flex-col md:flex-row" style={{ marginLeft: '250px' }}>
+				<Sidebar />
 
-                <div className="form-group">
-                  <label>Ảnh</label>
+				<div className="w-full md:w-3/4 mx-auto p-6">
+					<div className="bg-white shadow-md rounded-lg p-6">
+						<h1 className="text-2xl font-bold text-gray-800 mb-6">Cập nhật nội dung</h1>
 
-                  <div className="custom-file">
-                    <input
-                      type="file"
-                      name="content_images"
-                      className="custom-file-input"
-                      id="customFile"
-                      onChange={onChange}
-                      multiple
-                    />
-                    <label className="custom-file-label" htmlFor="customFile">
-                      Chọn hình
-                    </label>
-                  </div>
+						<form onSubmit={submitHandler} encType="multipart/form-data">
+							{/* Danh mục bài viết */}
+							<div className="mb-4">
+								<label className="block text-gray-700 font-semibold mb-2">Danh mục bài viết</label>
+								<select
+									className="w-full p-3 border rounded-md"
+									value={typeRole}
+									onChange={(e) => setTypeRole(e.target.value)}
+								>
+									{typeRoles.map((role) => (
+										<option key={role.value} value={role.value}>
+											{role.label}
+										</option>
+									))}
+								</select>
+							</div>
 
-                  {oldImages &&
-                    oldImages.map((img) => (
-                      <img
-                        key={img}
-                        src={img}
-                        alt={img}
-                        className="mt-3 mr-2"
-                        width="55"
-                        height="52"
-                      />
-                    ))}
+							{/* Tên bài viết */}
+							<div className="mb-4">
+								<label className="block text-gray-700 font-semibold mb-2">Tên bài viết</label>
+								<input
+									type="text"
+									className="w-full p-3 border rounded-md"
+									value={tenBaiViet}
+									onChange={(e) => setTenBaiViet(e.target.value)}
+								/>
+							</div>
 
-                  {imagesPreview.map((img) => (
-                    <img
-                      src={img}
-                      key={img}
-                      alt="Images Preview"
-                      className="mt-3 mr-2"
-                      width="55"
-                      height="52"
-                    />
-                  ))}
-                </div>
+							{/* Chủ đề */}
+							<div className="mb-4">
+								<label className="block text-gray-700 font-semibold mb-2">Chủ đề</label>
+								<input
+									type="text"
+									className="w-full p-3 border rounded-md"
+									value={chuDe}
+									onChange={(e) => setChuDe(e.target.value)}
+								/>
+							</div>
 
-                <button
-                  id="login_button"
-                  type="submit"
-                  className="btn btn-block py-3"
-                  disabled={loading ? true : false}
-                >
-                  Cập nhật
-                </button>
-              </form>
-            </div>
-          </Fragment>
-        </div>
-      </div>
-    </Fragment>
-  );
+							{/* Mô tả ngắn */}
+							<div className="mb-4">
+								<label className="block text-gray-700 font-semibold mb-2">Mô tả ngắn</label>
+								<textarea
+									className="w-full p-3 border rounded-md"
+									rows="3"
+									value={moTaNgan}
+									onChange={(e) => setMoTaNgan(e.target.value)}
+								></textarea>
+							</div>
+
+							{/* Nội dung */}
+							<div className="mb-4">
+								<label className="block text-gray-700 font-semibold mb-2">Nội dung</label>
+								<textarea
+									className="w-full p-3 border rounded-md"
+									rows="8"
+									value={noiDung}
+									onChange={(e) => setNoiDung(e.target.value)}
+								></textarea>
+							</div>
+
+							{/* Audio */}
+							<div className="mb-4">
+								<label className="block text-gray-700 font-semibold mb-2">Audio</label>
+								<input
+									type="text"
+									className="w-full p-3 border rounded-md"
+									value={audio}
+									onChange={(e) => setAudio(e.target.value)}
+								/>
+							</div>
+
+							{/* Thứ tự hiển thị */}
+							<div className="mb-4">
+								<label className="block text-gray-700 font-semibold mb-2">Thứ tự hiển thị</label>
+								<input
+									type="text"
+									className="w-full p-3 border rounded-md"
+									value={thuTuHienThi}
+									onChange={(e) => setThuTuHienThi(e.target.value)}
+								/>
+							</div>
+
+							{/* Upload hình ảnh */}
+							<div className="mb-6">
+								<label className="block text-gray-700 font-semibold mb-2">Ảnh bài viết</label>
+								<input
+									type="file"
+									name="content_images"
+									className="w-full p-2 border rounded-md"
+									onChange={onChange}
+									multiple
+								/>
+								<div className="mt-3 flex gap-3 flex-wrap">
+									{oldImages &&
+										oldImages.map((img) => (
+											<img
+												key={img}
+												src={img}
+												alt="Ảnh cũ"
+												className="w-16 h-16 object-cover rounded-md shadow"
+											/>
+										))}
+									{imagesPreview.map((img) => (
+										<img
+											key={img}
+											src={img}
+											alt="Preview"
+											className="w-16 h-16 object-cover rounded-md shadow"
+										/>
+									))}
+								</div>
+							</div>
+
+							{/* Nút cập nhật */}
+							<button
+								type="submit"
+								className={`w-full py-3 px-4 uppercase rounded-md text-white font-semibold ${
+									loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+								}`}
+								disabled={loading}
+								style={{ backgroundColor: '#2563eb' }}
+							>
+								Cập nhật
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</Fragment>
+	);
 };
 
 export default UpdateContent;

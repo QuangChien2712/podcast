@@ -42,8 +42,10 @@ import {
     CLEAR_ERRORSPTSN,
 
     CONTENT_DETAILS_REQUESTPTSN,
-  CONTENT_DETAILS_SUCCESSPTSN,
-  CONTENT_DETAILS_FAILPTSN,
+    CONTENT_DETAILS_SUCCESSPTSN,
+    CONTENT_DETAILS_FAILPTSN,
+
+    SEARCH_CONTENTS_PTSN
 
 } from '../constants/contentConstants'
 
@@ -396,5 +398,19 @@ export const reviewReducer = (state = {}, action) => {
 
         default:
             return state
+    }
+}
+
+
+export const searchContentsPTSN = (state = { contentsSPTSN: [] }, action) => {
+    switch (action.type) {
+       
+        case SEARCH_CONTENTS_PTSN:
+            return {
+                contentsSPTSN: action.payload
+            }
+
+        default:
+            return state;
     }
 }

@@ -16,11 +16,13 @@ const NewsItem = ({ image, title, description }) => {
 			<a>
 				<img className="rounded-t-lg w-full" src={image} alt={title} />
 			</a>
-			<div className="p-5">
+			<div className="p-3">
 				<a>
 					<h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">{title}</h5>
 				</a>
-				<p className="line-clamp-5 mb-3 font-normal text-gray-700 dark:text-gray-400">{description}</p>
+				<p className="text-justify line-clamp-5 mb-3 font-normal text-gray-700 dark:text-gray-400">
+					{description}
+				</p>
 				<a className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-blue-300">
 					Đọc thêm
 					<svg

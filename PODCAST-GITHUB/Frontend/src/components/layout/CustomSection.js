@@ -3,15 +3,14 @@ import React from "react";
 const CustomSection = ({ title, subtitle }) => {
   return (
     <div
-      className="flex flex-col items-stretch w-11/12"
-      style={{ margin: "auto" }}
+      className="m-auto flex flex-col items-stretch w-11/12"
     >
       {/* Section 1 */}
       <div
         style={{ backgroundColor: "#ffae51" }}
         className={`text-white flex items-center justify-center text-center p-6 h-auto flex-1`}
       >
-        <span className="font-svnCookies text-xl uppercase font-bold">
+        <span className="font-svnCookies text-base uppercase font-bold">
           {title}
         </span>
         <svg
@@ -31,7 +30,7 @@ const CustomSection = ({ title, subtitle }) => {
       </div>
 
       {/* Section 2 */}
-      <div className="mt-6 text-2xl text-customOrange-light w-full flex items-center justify-center text-center p-6 border-2 border-orange-500 flex-1">
+      <div className="mt-4 text-xl text-customOrange-light w-full flex items-center justify-center text-center p-6 border-2 border-orange-500 flex-1">
         {subtitle}
       </div>
     </div>

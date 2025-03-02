@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       phoneNumber: DataTypes.STRING,
       typeRole: DataTypes.STRING,
       isSchedule: DataTypes.STRING,
+      description: DataTypes.STRING
     },
     {}
   );
