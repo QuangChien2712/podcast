@@ -25,6 +25,14 @@ module.exports = {
           light: "#f38c23",
           hard: "#ff924d",
         },
+        cusDarkYellow: "#c58f12",
+        cusDark: {
+          linerInput: "#050400",
+        },
+        cusBgForm: {
+          from: "#c1c1c1",
+          to: "#f1e4c7",
+        },
       },
       lineHeight: {
         "extra-loose": "2.5",
