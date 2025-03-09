@@ -1,60 +1,26 @@
 import Breadcrumb from "../layout/Breadcrumb";
 import NewsItem from "../layout/NewsItem";
-import axios from "../../axios";
-
-import React, { Fragment, useEffect, useState } from "react";
-import { useAlert } from "react-alert";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdminContentsPTSN } from "../../actions/contentActions";
 import { Link } from "react-router-dom";
 
 const BlogCBCS = () => {
-  const alert = useAlert();
   const dispatch = useDispatch();
-
-  const [chuoiTimKiem, setChuoiTimKiem] = useState("");
-  const [listResultSearch, setListResultSearch] = useState([]);
-  const [isOpenResultSearch, setIsOpenResultSearch] = useState(false);
-
   const [contentsSearchPTSN, setContentsSearchPTSN] = useState([]);
   const [searchPTSN, setSearchPTSN] = useState("");
-
   const { loading, error, contents } = useSelector(
     (state) => state.contentsPTSN
   );
 
   const { contentsSPTSN } = useSelector((state) => state.contentsSPTSN);
-
   useEffect(() => {
     dispatch(getAdminContentsPTSN("HM2"));
   }, []);
-
   useEffect(() => {
     setContentsSearchPTSN(contentsSPTSN.ketQuaTimKiem);
     setSearchPTSN(contentsSPTSN.chuoiTimKiem);
   }, [contentsSPTSN]);
-
-  const handleTimKiem = (chuoiSearch, data) => {
-    let listResult = [];
-    let UpCase = "";
-    let LoCase = "";
-
-    for (let i = 0; i < data.length; i++) {
-      let element = data[i].noiDung.concat(data[i].tenBaiViet);
-      UpCase = chuoiSearch.toUpperCase();
-      LoCase = chuoiSearch.toLowerCase();
-      if (element.includes(UpCase) || element.includes(LoCase)) {
-        listResult.push(data[i]);
-      }
-    }
-    setListResultSearch(listResult);
-
-    if (listResult.length > 0 && chuoiSearch.length >= 2) {
-      setIsOpenResultSearch(true);
-    } else {
-      setIsOpenResultSearch(false);
-    }
-  };
 
   const breadcrumbItems = [
     {
@@ -89,7 +55,7 @@ const BlogCBCS = () => {
           </div>
         ) : (
           <div className="mt-4 ml-8">
-            Không có kết quả tìm kiếm theo từ khóa
+            Không có kết quả tìm kiếm theo tiêu đề
             <span style={{ fontSize: "20px", fontWeight: "700" }}>
               {" "}
               "{searchPTSN}"
