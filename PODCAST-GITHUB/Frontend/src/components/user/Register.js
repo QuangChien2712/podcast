@@ -1,226 +1,300 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from "react";
+import MetaData from "../layout/MetaData";
+import { useAlert } from "react-alert";
+import { useDispatch, useSelector } from "react-redux";
+import { register, clearErrors } from "../../actions/userActions";
+import { toast } from "react-toastify";
+import CommitmentTitle from "../content/CommitmentTitle";
+import "../../output.css";
 
-import MetaData from '../layout/MetaData';
-import Loader from '../layout/Loader';
 
-import { useAlert } from 'react-alert';
-import { useDispatch, useSelector } from 'react-redux';
-import { register, clearErrors } from '../../actions/userActions';
-import store from '../../store';
-import { loadUser } from '../../actions/userActions';
+const optionsChooseRole = [
+  { label: "Chọn chức danh:", value: "default" },
+  { label: "Chủ doanh nghiệp", value: "BusinessOwner" },
+  { label: "Quản lý", value: "Manager" },
+  { label: "Khác", value: "Other" },
+];
 
 const Register = ({ history }) => {
-	const alert = useAlert();
-	const dispatch = useDispatch();
-	const [avatarPreview, setAvatarPreview] = useState('/images/default_avatar.jpg');
-	const { isAuthenticated, error, loading } = useSelector((state) => state.auth);
-	const redirect = isAuthenticated ? '/' : window.location.pathname;
+  const alert = useAlert();
+  const dispatch = useDispatch();
+  const [avatarPreview, setAvatarPreview] = useState(
+    "/images/default_avatar.jpg"
+  );
+  const { isAuthenticated, error, loading } = useSelector(
+    (state) => state.auth
+  );
+  const redirect = isAuthenticated ? "/" : window.location.pathname;
 
-	useEffect(() => {
-		if (isAuthenticated) {
-			history.goBack();
-		}
-		// history.push(redirect);
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.goBack();
+    }
 
-		if (error) {
-			alert.error(error);
-			dispatch(clearErrors());
-		}
-	}, [dispatch, alert, isAuthenticated, error, history, redirect]);
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
+  }, [dispatch, alert, isAuthenticated, error, history, redirect]);
 
-	// Albert
-	const [formData, setFormData] = useState({
-		name: '',
-		phoneNumber: '',
-		email: '',
-		password: '',
-		confirmPassword: '',
-		avatar: '',
-	});
+  // Albert
+  const [formData, setFormData] = useState({
+    gender: "",
+    name: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    avatar: "",
+    role: "",
+  });
 
-	const handleChange = (e) => {
-		if (e.target.name === 'avatar') {
-			const file = e.target.files[0];
-			if (!file) {
-				alert.error('Vui lòng chọn ảnh hợp lệ!');
-				return;
-			}
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "avatar") {
+      const file = files[0];
+      if (!file) {
+        toast.info("Vui lòng chọn ảnh hợp lệ!");
+        return;
+      }
+      if (!file.type.startsWith("image/")) {
+        toast.error("Vui lòng chọn hình ảnh!");
+        return;
+      }
 
-			const reader = new FileReader();
-			reader.onload = () => {
-				if (reader.readyState === 2) {
-					setAvatarPreview(reader.result);
-					setFormData({ ...formData, avatar: reader.result });
-				}
-			};
-			reader.readAsDataURL(file);
-		} else {
-			setFormData({ ...formData, [e.target.name]: e.target.value });
-		}
-	};
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          if (reader.readyState === 2) {
+            setAvatarPreview(reader.result);
+            setFormData({ ...formData, avatar: reader.result });
+          }
+        } catch (error) {
+          toast.error("Lỗi khi tải file ảnh!");
+          console.error("Lỗi tải file ảnh:", error);
+        }
+      };
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		if (!formData.name.trim()) {
-			alert.error('Tên không được để trống!');
-			return;
-		}
+      reader.readAsDataURL(file);
+    } else if (name === "role") {
+      setFormData({ ...formData, role: value });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+    console.log(formData);
+  };
 
-		if (formData.password !== formData.confirmPassword) {
-			alert.error('Mật khẩu xác nhận không khớp!');
-			return;
-		}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (
+      !formData.gender.trim() ||
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.phoneNumber.trim() ||
+      !formData.password.trim()
+    ) {
+      toast.info("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
 
-		// console.log('Form Data:', formData);
-		const { name, phoneNumber, email, password, avatar } = formData;
-		const registrationData = { name, phoneNumber, email, password, avatar };
-		dispatch(register(registrationData));
-	};
+    if (formData.role === "" || formData.role === "default") {
+      toast.info("Vui lòng chọn chức danh");
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      toast.info("Mật khẩu xác nhận không khớp!");
+      return;
+    }
 
-	return (
-		<Fragment>
-			<MetaData title={'Đăng ký'} />
+    try {
+      const result = await dispatch(register(formData));
 
-			<div className="min-h-screen flex items-center justify-center bg-gray-100">
-				<div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg mt-32 mb-20">
-					<h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Register</h2>
-					<form onSubmit={handleSubmit}>
-						{/* Name Field */}
-						<div className="mb-4">
-							<label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-								Họ và tên
-							</label>
-							<input
-								type="text"
-								id="name"
-								name="name"
-								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-								placeholder="Nhập họ và tên"
-								value={formData.name}
-								onChange={handleChange}
-								required
-							/>
-						</div>
+      // Logic thông báo đăng ký thất bại hay thành công
 
-						{/* Email Field */}
-						<div className="mb-4">
-							<label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-								Email
-							</label>
-							<input
-								type="email"
-								id="email"
-								name="email"
-								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-								placeholder="you@example.com"
-								value={formData.email}
-								onChange={handleChange}
-								required
-							/>
-						</div>
+      history.push("/login");
+    } catch (error) {
+      toast.error(error.message || "Đăng ký lỗi, xin vui lòng thử lại!");
+      console.error("Lỗi đăng ký:", error);
+    }
+  };
 
-						{/* PhoneNumber Field */}
-						<div className="mb-4">
-							<label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
-								Số điện thoại
-							</label>
-							<input
-								type="tel"
-								id="phoneNumber"
-								name="phoneNumber"
-								pattern="^[0-9]{10}$"
-								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-								placeholder="Nhập số điện thoại"
-								value={formData.phoneNumber}
-								onChange={handleChange}
-								required
-							/>
-						</div>
+  return (
+    <Fragment>
+      <MetaData title={"Đăng ký"} />
 
-						{/* Image field */}
-						<div className="mb-6">
-							<label htmlFor="avatar_upload" className="block text-sm font-medium text-gray-700 mb-2">
-								Hình nền
-							</label>
-							<div className="flex flex-col sm:flex-row items-center sm:space-x-4">
-								{/* Vùng hiển thị ảnh */}
-								<div className="flex-shrink-0">
-									<figure className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border border-gray-300">
-										<img src={avatarPreview} className="object-cover w-full h-full" alt="Ảnh nền" />
-									</figure>
-								</div>
+      <div className="flex flex-col items-center justify-center">
+        <div className="text-white bg-gradient-to-r from-cusBgForm-from to-cusBgForm-to p-8 rounded-lg shadow-md w-full max-w-lg mb-20 sm:mt-10">
+          <h2 className="text-2xl text-black font-bold mb-6 text-center">
+            Đăng Ký Thành Viên
+          </h2>
+          <form>
+            {/* Gender Field */}
+            <div className="mb-4">
+              <input
+                type="text"
+                id="gender"
+                name="gender"
+                className="w-full px-4 py-2 border border-white outline-none rounded-lg bg-gradient-to-r from-cusDark-linerInput to-cusDarkYellow"
+                placeholder="Danh xưng: Anh/chị"
+                value={formData.gender}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-								{/* Input chọn ảnh */}
-								<div className="mt-4 sm:mt-0 w-full">
-									<input
-										type="file"
-										name="avatar"
-										className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-										id="customFile"
-										accept="image/*"
-										onChange={handleChange}
-									/>
-									<label htmlFor="customFile" className="block text-sm text-gray-500 mt-1">
-										Chọn ảnh
-									</label>
-								</div>
-							</div>
-						</div>
+            {/* Name Field */}
+            <div className="mb-4">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="w-full px-4 py-2 border border-white outline-none rounded-lg bg-gradient-to-r from-cusDark-linerInput to-cusDarkYellow"
+                placeholder="Họ và tên"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-						{/* Password Field */}
-						<div className="mb-4">
-							<label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-								Mật khẩu
-							</label>
-							<input
-								type="password"
-								id="password"
-								name="password"
-								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-								placeholder="Nhập mật khẩu"
-								value={formData.password}
-								onChange={handleChange}
-								required
-							/>
-						</div>
+            {/* Role Field */}
+            <div className="mb-4">
+              <select
+                id="role"
+                name="role"
+                className="w-full px-4 py-2 border border-white outline-none rounded-lg bg-gradient-to-r from-cusDark-linerInput to-cusDarkYellow"
+                placeholder="you@example.com"
+                value={formData.role}
+                onChange={handleChange}
+                required
+              >
+                {optionsChooseRole.map((item) => (
+                  <option
+                    className="text-black cursor-pointer bg-cusBgForm-to"
+                    key={item.value}
+                    value={item.value}
+                  >
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-						{/* Confirm Password Field */}
-						<div className="mb-6">
-							<label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-								Xác nhận mật khẩu
-							</label>
-							<input
-								type="password"
-								id="confirmPassword"
-								name="confirmPassword"
-								className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-								placeholder="Nhập lại mật khẩu"
-								value={formData.confirmPassword}
-								onChange={handleChange}
-								required
-							/>
-						</div>
+            {/* Email Field */}
+            <div className="mb-4">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="w-full px-4 py-2 border border-white outline-none rounded-lg bg-gradient-to-r from-cusDark-linerInput to-cusDarkYellow"
+                placeholder="Email anh/chị"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-						{/* Submit Button */}
-						<button
-							type="submit"
-							className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
-						>
-							Đăng ký
-						</button>
-					</form>
+            {/* PhoneNumber Field */}
+            <div className="mb-4">
+              <input
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                pattern="^[0-9]{10}$"
+                className="w-full px-4 py-2 border border-white outline-none rounded-lg bg-gradient-to-r from-cusDark-linerInput to-cusDarkYellow"
+                placeholder="Số điện thoại"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-					{/* Already have an account */}
-					<div className="text-sm text-center text-gray-600 mt-4">
-						Bạn đã có tài khoản?{' '}
-						<a href="/login" className="text-blue-500 hover:underline">
-							Đăng nhập
-						</a>
-					</div>
-				</div>
-			</div>
-		</Fragment>
-	);
+            {/* Image field */}
+            <div className="mb-6">
+              <div className="flex flex-col sm:flex-row items-center sm:space-x-4">
+                {/* Vùng hiển thị ảnh */}
+                <div className="flex-shrink-0">
+                  <figure className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border border-gray-300">
+                    <img
+                      src={avatarPreview}
+                      className="object-cover w-full h-full"
+                      alt="Ảnh nền"
+                    />
+                  </figure>
+                </div>
+
+                {/* Input chọn ảnh */}
+                <div className="mt-4 sm:mt-0 w-full">
+                  <input
+                    type="file"
+                    name="avatar"
+                    className="block w-full text-sm text-gray-900 rounded-lg cursor-pointer bg-cusBgForm-to focus:outline-none"
+                    id="customFile"
+                    accept="image/*"
+                    onChange={handleChange}
+                  />
+                  <label
+                    htmlFor="customFile"
+                    className="block text-sm text-gray-500 mt-1"
+                  >
+                    Chọn avatar
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="mb-4">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="w-full px-4 py-2 border border-white outline-none rounded-lg bg-gradient-to-r from-cusDark-linerInput to-cusDarkYellow"
+                placeholder="Nhập mật khẩu"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Confirm Password Field */}
+            <div className="mb-6">
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                className="w-full px-4 py-2 border border-white outline-none rounded-lg bg-gradient-to-r from-cusDark-linerInput to-cusDarkYellow"
+                placeholder="Nhập lại mật khẩu"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="w-full text-white bg-gray-700 py-2 px-4 rounded-lg hover:bg-gray-900 transition duration-200"
+            >
+              Đăng ký
+            </button>
+          </form>
+
+          {/* Already have an account */}
+          <div className="text-sm text-center text-gray-600 mt-4">
+            Bạn đã có tài khoản?{" "}
+            <span
+              onClick={() => history.push("/login")}
+              className="text-gray-900 underline cursor-pointer"
+            >
+              Đăng nhập
+            </span>
+          </div>
+        </div>
+        <CommitmentTitle />
+      </div>
+    </Fragment>
+  );
 };
 
 export default Register;

@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { useAlert } from "react-alert";
 
 const footerItems = [
   {
@@ -41,7 +40,7 @@ const footerItems = [
       </svg>
     ),
     subTitle: "Đặt Lịch Hẹn",
-    link: "/dat-lich-hen",
+    link: "/booking",
   },
   {
     icon: (
@@ -65,16 +64,15 @@ const footerItems = [
         Đăng Ký <br /> Thành Viên
       </>
     ),
-    link: "/dang-ky-thanh-vien",
+    link: "/register",
   },
 ];
 
 const BottomNav = () => {
-  const alert = useAlert();
   const history = useHistory();
 
   const handleClick = (item) => {
-    alert.show("Tính năng đang cập nhật");
+    history.push(item.link);
   };
 
   return (
@@ -87,7 +85,10 @@ const BottomNav = () => {
             onClick={() => handleClick(item)}
           >
             {item.icon}
-            <span className="text-xs sm:text-sm font-bold text-white mt-1">
+            <span
+              className="text-xs sm:text-sm font-bold text-white mt-1"
+              onClick={() => handleClick(item)}
+            >
               {item.subTitle}
             </span>
           </div>

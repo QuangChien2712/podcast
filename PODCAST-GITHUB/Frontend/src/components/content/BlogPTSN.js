@@ -1,7 +1,5 @@
 import Breadcrumb from "../layout/Breadcrumb";
 import NewsItem from "../layout/NewsItem";
-import axios from "../../axios";
-
 import React, { Fragment, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +37,7 @@ const BlogPTSN = () => {
     let LoCase = "";
 
     for (let i = 0; i < data.length; i++) {
-      let element = data[i].noiDung.concat(data[i].tenBaiViet);
+      let element = data[i].tenBaiViet;
       UpCase = chuoiSearch.toUpperCase();
       LoCase = chuoiSearch.toLowerCase();
       if (element.includes(UpCase) || element.includes(LoCase)) {
@@ -88,7 +86,7 @@ const BlogPTSN = () => {
           </div>
         ) : (
           <div className="mt-4 ml-8">
-            Không có kết quả tìm kiếm theo từ khóa
+            Không có kết quả tìm kiếm theo tiêu đề
             <span style={{ fontSize: "20px", fontWeight: "700" }}>
               {" "}
               "{searchPTSN}"

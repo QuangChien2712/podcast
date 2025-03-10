@@ -78,7 +78,7 @@ const handleTimKiem = (chuoiSearch, data) => {
     let LoCase = "";
 
     for (let i = 0; i < data.length; i++) {
-      let element = (data[i].noiDung).concat(data[i].tenBaiViet);
+      let element = data[i].tenBaiViet;
       UpCase = chuoiSearch.toUpperCase();
       LoCase = chuoiSearch.toLowerCase();
       if (element.includes(UpCase) || element.includes(LoCase)){

@@ -29,7 +29,7 @@ const Home = () => {
 						<Link to="/bio" className="float-right mt-3">
 							<div className="px-3 w-full mt-[120px]">
 								<CustomSection
-									title="Sợ Gì Làm Đó! & THEO'S BLOG"
+									title="Sợ Gì Làm Đó! & THEO BLOG"
 									subtitle={
 										<>
 											WORKSHOP MAY ĐO <br />
