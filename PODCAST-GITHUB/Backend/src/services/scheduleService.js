@@ -9,6 +9,8 @@ sequelize = new Sequelize("podcast", "root", "root", {
   database: "podcast",
   host: "127.0.0.1",
   dialect: "mysql",
+  operatorsAliases:0,
+  timezone:"+07:00"
 });
 fs.readdirSync("D:/DU_AN_QUY/BACKEND/db/models").forEach((file) => {
   let b = file.toString();

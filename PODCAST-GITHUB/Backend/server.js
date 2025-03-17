@@ -21,6 +21,7 @@ const customizeConfig = {
       require: true,
       rejectUnauthorized: false,
     },
+    useUTC: false,
   },
   timezone: "+07:00",
 };

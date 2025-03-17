@@ -29,7 +29,11 @@ const DemoArticleDetailPTSN = ({ match, history }) => {
   const { isDeleted } = useSelector((state) => state.review);
 
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [isLike, setIsLike] = useState(false);
+  const [comment, setComment] = useState("");
+
   const [listCommentContent, setListCommentContens] = useState([]);
+  const pathDetails = window.location.pathname;
 
   useEffect(() => {
     if (String(content.id) !== contentId || !match.params.id) {
@@ -58,6 +62,7 @@ const DemoArticleDetailPTSN = ({ match, history }) => {
     success,
     contentId,
     content.id,
+    pathDetails,
     match.params.id,
     history,
   ]);
@@ -78,6 +83,31 @@ const DemoArticleDetailPTSN = ({ match, history }) => {
     }
   }, [dispatch, reviews]);
 
+  const createLike = () => {
+      let dataparam = {
+        like: "1",
+        comment: null,
+        share: "0",
+        idContent: contentId,
+        email: user.email,
+      };
+      dispatch(newReview(dataparam));
+      setIsLike(true);
+      dispatch(getContentReviews(contentId));
+    };
+  
+    const deleteLike = () => {
+      let dataparam = {
+        like: "1",
+        idContent: contentId,
+        email: user.email,
+      };
+      dispatch(deleteReview(dataparam));
+      setIsLike(false);
+      dispatch(getContentReviews(contentId));
+    };
+
+    
   const breadcrumbItems = [
     {
       label: "Home",
@@ -103,7 +133,7 @@ const DemoArticleDetailPTSN = ({ match, history }) => {
         title={content.tenBaiViet}
         content={content.noiDung}
         author={"Theo"}
-        publishedAt={String(content.createdAt).substring(0, 10)}
+        publishedAt={`${new Date(content.createdAt).getDate()} - ${new Date(content.createdAt).getMonth() + 1} - ${new Date(content.createdAt).getFullYear()}`}
         comments={listCommentContent}
       />
     </>
