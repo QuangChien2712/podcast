@@ -153,7 +153,7 @@ const DemoArticleDetailCBCS = ({ match, history }) => {
         title={content.tenBaiViet}
         content={content.noiDung}
         author={"Theo"}
-        publishedAt={String(content.createdAt).substring(0, 10)}
+        publishedAt={`${new Date(content.createdAt).getDate()}/${new Date(content.createdAt).getMonth() + 1}/${new Date(content.createdAt).getFullYear()}`}
         comments={listCommentContent}
       />
     </>

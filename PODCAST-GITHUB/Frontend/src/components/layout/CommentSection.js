@@ -54,7 +54,7 @@ const CommentSection = ({comments }) => {
 	};
 
 	const chuyenNgay = (thoiGian) =>{
-		return	`${new Date(thoiGian).getHours()}:${new Date(thoiGian).getMinutes()} ${new Date(thoiGian).getDate()} - ${new Date(thoiGian).getMonth() + 1} - ${new Date(thoiGian).getFullYear()}` 
+		return	`${new Date(thoiGian).getHours()}:${new Date(thoiGian).getMinutes()} ${new Date(thoiGian).getDate()}/${new Date(thoiGian).getMonth() + 1}/${new Date(thoiGian).getFullYear()}` 
 	}
 
 	return (

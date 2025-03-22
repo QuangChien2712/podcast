@@ -113,6 +113,16 @@ const ArticleDetail = ({
     setTimeout(reLoad, 100);
   };
 
+  const shareMDN = async () => {
+    try {
+      await navigator.share({url: window.location.href}); 
+      console.log("Vào share");
+           
+    } catch (err) {
+      console.log(err);      
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white border border-gray-200 md:rounded-lg shadow-md">
       {/* Hình ảnh bài viết */}
@@ -191,7 +201,29 @@ const ArticleDetail = ({
             )}
 
             {/* Icon share */}
+
+            {/*<button
+              className="flex items-center text-gray-500 hover:text-blue-500 ml-3"
+              aria-label="Share"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span className="ml-2">Share</span>           
+            </button>*/}
+
+
             <button
+              onClick={()=>{shareMDN()}}
               className="flex items-center text-gray-500 hover:text-blue-500 ml-3"
               aria-label="Share"
             >
@@ -209,6 +241,16 @@ const ArticleDetail = ({
               </svg>
               <span className="ml-2">Share</span>
             </button>
+
+            {/*<div
+              className="fb-share-button"
+              data-href={window.location.href}
+              data-layout="button_count"
+            ></div>
+            */}
+
+            
+
           </div>
         </div>
         <p>{publishedAt}</p>
