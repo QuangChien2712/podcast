@@ -41,6 +41,8 @@ import Bio from "./components/layout/Bio";
 
 import { ToastContainer, Slide } from "react-toastify";
 import Booking from "./components/content/Booking";
+import ManageBookingContent from "./components/admin/ManageBookingContent";
+import ManageBooking from "./components/admin/ManageBooking";
 
 const App = () => {
   useEffect(() => {
@@ -76,7 +78,10 @@ const App = () => {
           <Route path="/blog2" component={BlogCBCS} exact />
           <Route path="/blog2/:id" component={DemoArticleDetailCBCS} exact />
           <Route path="/register" component={Register} />
+          {/* quybuiquang */}
+          {/* 09/042025 */}
           <Route path="/booking" component={Booking} />
+
           <ProtectedRoute path="/me" component={Profile} exact />
           <ProtectedRoute path="/me/update" component={UpdateProfile} exact />
           <ProtectedRoute
@@ -120,6 +125,15 @@ const App = () => {
           component={UpdateUser}
           exact
         />
+
+        {/* quybuiquang */}
+        {/* 09/042025 */}
+        <Route
+          path="/admin/manage-booking-content"
+          component={ManageBookingContent}
+        />
+        <Route path="/admin/manage-bookings" component={ManageBooking} />
+
         <div style={{ height: "85px" }}></div>
 
         {/* {!loading && (!isAuthenticated || user.typeRole !== 'admin') && (
