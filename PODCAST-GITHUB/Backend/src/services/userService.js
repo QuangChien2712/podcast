@@ -3,63 +3,75 @@ const Sequelize = require("sequelize");
 
 const db = {};
 let sequelize;
-sequelize = new Sequelize("podcast", "root", "root", {
-  username: "root",
-  password: "root",
+sequelize = new Sequelize("podcast", "chien", "Chien@123", {
+  username: "chien",
+  password: "Chien@123",
   database: "podcast",
   host: "127.0.0.1",
   dialect: "mysql",
   operatorsAliases:0,
   timezone:"+07:00"
 });
-fs.readdirSync("D:/DU_AN_QUY/BACKEND/db/models").forEach((file) => {
+fs.readdirSync("/home/chien/BACKEND-PODCAST/db/models").forEach((file) => {
   let b = file.toString();
   let model = "";
 
   if (b === "content.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/content.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/content.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "review.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/review.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/review.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "measure.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/measure.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/measure.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "pay.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/pay.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/pay.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "role.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/role.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/role.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "schedule.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/schedule.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/schedule.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "time_schedule.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/time_schedule.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/time_schedule.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "user.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/user.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/user.js`)(
+      sequelize,
+      Sequelize.DataTypes
+    );
+  }
+  if (b === "discussioncontent.js") {
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/discussioncontent.js`)(
+      sequelize,
+      Sequelize.DataTypes
+    );
+  }
+  if (b === "discussiontime.js") {
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/discussiontime.js`)(
       sequelize,
       Sequelize.DataTypes
     );

@@ -1,6 +1,6 @@
 const contentService = require("../services/contentService");
 const cloudinary = require("cloudinary");
-const sharp = require("sharp");
+// const sharp = require("sharp");
 
 // const path = require("path");
 const fs = require("fs");
@@ -124,6 +124,15 @@ let handleGetAllContentsPTSN = async (req, res) => {
       if(contents && contents.id){
         let urlImage = contents.hinhAnh.split("CHIEN")[1];
         let urlShare = `http://duanpodcast.shop/phat-trien-su-nghiep/${contents.id}`;
+
+        // let trungGian = "";
+        // if(typeRole === `HM2`){
+        //   trungGian = "blog2";
+        // }else{
+        //   trungGian = "blog1";
+        // }
+        // let urlShare2 = `http://duanpodcast.shop/${trungGian}/${contents.id}`;
+
         let nameTitle = contents.tenBaiViet;
         let description = contents.moTaNgan;
 

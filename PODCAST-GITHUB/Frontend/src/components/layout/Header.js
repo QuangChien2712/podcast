@@ -14,11 +14,11 @@ const menuItems = [
   { name: "PHÁT TRIỂN SỰ NGHIỆP", idSection: "/blog1" },
   { name: "CÂN BẰNG CUỘC SỐNG", idSection: "/blog2" },
   { name: "PODCAST", idSection: "/" },
-  { name: "ĐẶT LỊCH HẸN 1-1", idSection: "/" },
+  { name: "ĐẶT LỊCH HẸN 1-1", idSection: "/booking" },
   { name: "BỘ CÔNG CỤ", idSection: "/" },
 ];
 
-const searchPaths = ["/blog1", "/blog2", "/career", "/balance", "/podcast"];
+const searchPaths = ["/blog1", "/blog2", "/booking", "/career", "/balance", "/podcast"];
 
 const Header = () => {
   const location = useLocation();

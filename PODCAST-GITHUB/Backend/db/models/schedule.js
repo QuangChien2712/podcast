@@ -4,17 +4,18 @@ module.exports = (sequelize, DataTypes) => {
     "Schedule",
     {
       email: DataTypes.STRING,
-      timeSchedule: DataTypes.STRING,
-      topicSchedule: DataTypes.STRING,
+      phone:  DataTypes.STRING,
+      selectedContent:  DataTypes.STRING,
+      otherContent:  DataTypes.STRING,
+      selectedTimes:  DataTypes.STRING,
+      otherTime: DataTypes.STRING,
+      selectedDate: DataTypes.STRING,
+      trangThai: DataTypes.STRING
     },
     {}
   );
   Schedule.associate = function (models) {
-    Schedule.belongsTo(models.User, {
-      foreignKey: "email",
-      targetKey: "email",
-      as: "userSchedule",
-    });
+    
   };
   return Schedule;
 };

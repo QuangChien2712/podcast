@@ -2,6 +2,8 @@ const scheduleService = require("../services/scheduleService");
 
 let handleCreateNewSchedule = async (req, res) => {
   try {
+    console.log("data: ", req.body);
+    
     let infor = await scheduleService.handleCreateNewSchedule(req.body);
     return res.status(200).json(infor);
   } catch (error) {
@@ -20,7 +22,7 @@ let handleGetAllSchedules = async (req, res) => {
     if (!id) {
       return res.status(200).json({
         errCode: 1,
-        errMessage: "Thiếu dữ liệu",
+        message: "Thiếu dữ liệu",
         schedules: [],
       });
     }
@@ -28,7 +30,7 @@ let handleGetAllSchedules = async (req, res) => {
     let schedules = await scheduleService.handleGetAllSchedules(id);
     return res.status(200).json({
       errCode: 0,
-      errMessage: "Ok",
+      message: "Ok",
       schedules,
     });
   } catch (error) {

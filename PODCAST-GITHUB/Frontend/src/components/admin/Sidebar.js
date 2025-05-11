@@ -31,6 +31,8 @@ const nav = [
 	{ id: 1, title: 'Quản lý bài viết', link: '/admin/contents', icon: 'fa fa-product-hunt mr-2' },
 	{ id: 2, title: 'Quản lý tương tác', link: '/admin/reviews', icon: 'fa fa-star mr-2' },
 	{ id: 3, title: 'Quản lý người dùng', link: '/admin/users', icon: 'fa fa-users mr-2' },
+	{ id: 4, title: 'Quản lý thảo luận', link: '/admin/manage-booking-content', icon: 'fa fa-comment mr-2' },
+	{ id: 5, title: 'Quản lý lịch hẹn', link: '/admin/manage-bookings', icon: 'fa fa-calendar mr-2' },
 ];
 const Sidebar = () => {
 	const [isOpen, setIsOpen] = useState(false);

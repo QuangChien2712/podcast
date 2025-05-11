@@ -3,63 +3,75 @@ const Sequelize = require("sequelize");
 
 const db = {};
 let sequelize;
-sequelize = new Sequelize("podcast", "root", "root", {
-  username: "root",
-  password: "root",
+sequelize = new Sequelize("podcast", "chien", "Chien@123", {
+  username: "chien",
+  password: "Chien@123",
   database: "podcast",
   host: "127.0.0.1",
   dialect: "mysql",
   operatorsAliases:0,
   timezone:"+07:00"
 });
-fs.readdirSync("D:/DU_AN_QUY/BACKEND/db/models").forEach((file) => {
+fs.readdirSync("/home/chien/BACKEND-PODCAST/db/models").forEach((file) => {
   let b = file.toString();
   let model = "";
 
   if (b === "content.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/content.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/content.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "review.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/review.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/review.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "measure.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/measure.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/measure.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "pay.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/pay.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/pay.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "role.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/role.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/role.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "schedule.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/schedule.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/schedule.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "time_schedule.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/time_schedule.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/time_schedule.js`)(
       sequelize,
       Sequelize.DataTypes
     );
   }
   if (b === "user.js") {
-    model = require(`D:/DU_AN_QUY/BACKEND/db/models/user.js`)(
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/user.js`)(
+      sequelize,
+      Sequelize.DataTypes
+    );
+  }
+  if (b === "discussioncontent.js") {
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/discussioncontent.js`)(
+      sequelize,
+      Sequelize.DataTypes
+    );
+  }
+  if (b === "discussiontime.js") {
+    model = require(`/home/chien/BACKEND-PODCAST/db/models/discussiontime.js`)(
       sequelize,
       Sequelize.DataTypes
     );
@@ -81,20 +93,26 @@ const { resolve } = require("path");
 let handleCreateNewSchedule = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (data && data.typeRole) {
+      if (data && (data.email || data.phone)) {
+        
         db.Schedule.create({
           email: data.email,
-          timeSchedule: data.timeSchedule,
-          topicSchedule: data.topicSchedule,
+          phone: data.phone,
+          selectedContent: data.selectedContent,
+          otherContent: data.otherContent,
+          selectedTimes: data.selectedTimes,
+          otherTime: data.otherTime,
+          selectedDate: data.selectedDate,
+          trangThai: data.trangThai,
         });
         resolve({
           errCode: 0,
-          errMessage: "Ok",
+          message: "Ok",
         });
       } else {
         resolve({
           errCode: 0,
-          errMessage: "Không có dữ liệu",
+          message: "Không có dữ liệu",
         });
       }
     } catch (error) {
@@ -128,7 +146,7 @@ let handleEditSchedule = (data) => {
       if (!data.id) {
         resolve({
           errCode: 2,
-          errMessage: "Thiếu dữ liệu!",
+          message: "Thiếu dữ liệu!",
         });
       }
 
@@ -140,17 +158,22 @@ let handleEditSchedule = (data) => {
         await db.Schedule.upsert({
           id: data.id,
           email: data.email,
-          timeSchedule: data.timeSchedule,
-          topicSchedule: data.topicSchedule,
+          phone: data.phone,
+          selectedContent: data.selectedContent,
+          otherContent: data.otherContent,
+          selectedTimes: data.selectedTimes,
+          otherTime: data.otherTime,
+          selectedDate: data.selectedDate,
+          trangThai: data.trangThai,
         });
         resolve({
           errCode: 0,
-          errMessage: "Update the Schedule succeeds!",
+          message: "Update the Schedule succeeds!",
         });
       } else {
         resolve({
           errCode: 1,
-          errMessage: `Schedule isn't found!`,
+          message: `Schedule isn't found!`,
         });
       }
     } catch (error) {
@@ -168,7 +191,7 @@ let handleDeleteSchedule = (scheduleId) => {
       if (!scheduledata) {
         resolve({
           errCode: 2,
-          errMessage: `The schedule isn't exist`,
+          message: `The schedule isn't exist`,
         });
       }
       // await scheduledata.destroy(); scheduledata phải là instance của sequelize mới destroy được. Vì config query raw = true nên không còn là thể hiện nữa nên phải chọc trực tiếp từ db
@@ -176,7 +199,7 @@ let handleDeleteSchedule = (scheduleId) => {
 
       resolve({
         errCode: 0,
-        errMessage: "Schedule has been deleted successfully!",
+        message: "Schedule has been deleted successfully!",
       });
     } catch (error) {
       reject(error);

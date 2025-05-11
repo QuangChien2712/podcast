@@ -10,6 +10,9 @@ const time_scheduleController = require("../controllers/time_scheduleController"
 const userService = require("../services/userService");
 const verifyToken = require("./verifyToken");
 
+const discussioncontentController = require("../controllers/discussioncontentController");
+const discussiontimeController = require("../controllers/discussiontimeController");
+
 let router = express.Router();
 
 const initWebRoute = (app) => {
@@ -63,11 +66,11 @@ const initWebRoute = (app) => {
     router.put("/edit-role", verifyToken.verifyTokenAndAuth, roleController.handleEditRole);
     router.delete("/delete-role", verifyToken.verifyTokenAndAuth, roleController.handleDeleteRole);
 
-    // Schedule
-    router.post("/create-new-schedule", verifyToken.verifyTokenAndAuth, scheduleController.handleCreateNewSchedule);
-    router.get("/get-all-schedules", verifyToken.verifyTokenAndAuth, scheduleController.handleGetAllSchedules);    
-    router.put("/edit-schedule", verifyToken.verifyTokenAndAuth, scheduleController.handleEditSchedule);
-    router.delete("/delete-schedule", verifyToken.verifyTokenAndAuth, scheduleController.handleDeleteSchedule);
+    // Schedule 
+    router.post("/create-new-booking", scheduleController.handleCreateNewSchedule);
+    router.get("/get-all-bookings", verifyToken.verifyTokenAndAuth, scheduleController.handleGetAllSchedules);    
+    router.put("/edit-booking", verifyToken.verifyTokenAndAuth, scheduleController.handleEditSchedule);
+    router.delete("/delete-booking", verifyToken.verifyTokenAndAuth, scheduleController.handleDeleteSchedule);
 
     // Time_schedule
     router.post("/create-new-time_schedule", verifyToken.verifyTokenAndAuth, time_scheduleController.handleCreateNewTime_schedule);
@@ -75,6 +78,19 @@ const initWebRoute = (app) => {
     router.put("/edit-time_schedule", verifyToken.verifyTokenAndAuth, time_scheduleController.handleEditTime_schedule);
     router.delete("/delete-time_schedule", verifyToken.verifyTokenAndAuth, time_scheduleController.handleDeleteTime_schedule);
 
+
+    // Discussioncontent
+    router.post("/create-new-discussioncontent", verifyToken.verifyTokenAndAuth, discussioncontentController.handleCreateNewDiscussioncontent);
+    router.get("/get-all-discussioncontents", discussioncontentController.handleGetAllDiscussioncontents);    
+    router.put("/edit-discussioncontent", verifyToken.verifyTokenAndAuth, discussioncontentController.handleEditDiscussioncontent);
+    router.delete("/delete-discussioncontent", verifyToken.verifyTokenAndAuth, discussioncontentController.handleDeleteDiscussioncontent);
+    
+    // Discussiontime
+    router.post("/create-new-discussiontime", verifyToken.verifyTokenAndAuth,  discussiontimeController.handleCreateNewDiscussiontime);
+    router.get("/get-all-discussiontimes",  discussiontimeController.handleGetAllDiscussiontimes);    
+    router.put("/edit-discussiontime", verifyToken.verifyTokenAndAuth, discussiontimeController.handleEditDiscussiontime);
+    router.delete("/delete-discussiontime", verifyToken.verifyTokenAndAuth, discussiontimeController.handleDeleteDiscussiontime);
+    
     return app.use("/api", router);
 };
 

@@ -12,12 +12,27 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
-      timeSchedule: {
+      phone:  {
         type: Sequelize.STRING
       },
-      topicSchedule: {
+      selectedContent:  {
         type: Sequelize.STRING
       },
+      otherContent:  {
+        type: Sequelize.STRING
+      },
+      selectedTimes:  {
+        type: Sequelize.STRING
+      },
+      otherTime: {
+        type: Sequelize.STRING
+      },
+      selectedDate: {
+        type: Sequelize.STRING
+      },
+      trangThai: {
+        type: Sequelize.STRING
+      },      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
