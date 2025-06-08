@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Breadcrumb = ({ items }) => {
 	return (
 		<nav className="flex py-3 flex-wrap" aria-label="Breadcrumb">

@@ -139,6 +139,11 @@ export const loadUser = () => async (dispatch) => {
       }
     }
 
+    if (!accessToken) {
+      // No need to make API call if no access token in cookies
+      return;
+    }
+
     dispatch({ type: LOAD_USER_REQUEST });
 
     const config = {
