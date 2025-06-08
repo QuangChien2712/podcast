@@ -1,116 +1,57 @@
-
-import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchContentsPTSN, getAdminContentsPTSN } from '../actions/contentActions';
+import { CBCS, PTSN } from '../constants/path';
 
-
-
-const SearchInput = ({ onSearch }) => {
+const SearchInput = () => {
 	const dispatch = useDispatch();
 
-	const [chuoiTimKiem, setChuoiTimKiem] = useState("");
+	const [chuoiTimKiem, setChuoiTimKiem] = useState('');
 	const [listResultSearch, setListResultSearch] = useState([]);
 
-	const { contents } = useSelector(
-		(state) => state.contentsPTSN
-	  );
+	const { contents } = useSelector((state) => state.contentsPTSN);
 
-	  useEffect(() => {   
-		
-		if(window.location.pathname === "/blog1"){
-			dispatch(getAdminContentsPTSN("HM1"));
-			
+	useEffect(() => {
+		if (window.location.pathname === `/${PTSN}`) {
+			dispatch(getAdminContentsPTSN('HM1'));
 		}
-		if(window.location.pathname === "/blog2"){
-			dispatch(getAdminContentsPTSN("HM2"));
+		if (window.location.pathname === `/${CBCS}`) {
+			dispatch(getAdminContentsPTSN('HM2'));
 		}
-		}, [window.location.pathname]);
+	}, [window.location.pathname]);
 
-		useEffect(() => {   
-			dispatch(setSearchContentsPTSN({
-				"chuoiTimKiem": chuoiTimKiem,
-				"ketQuaTimKiem": listResultSearch
-			}));
-		   }, [listResultSearch, chuoiTimKiem]);
-
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		const query = event.target.elements.search.value;
-		if (onSearch) {
-			onSearch(query);
-		}
-	};
+	useEffect(() => {
+		dispatch(
+			setSearchContentsPTSN({
+				chuoiTimKiem: chuoiTimKiem,
+				ketQuaTimKiem: listResultSearch,
+			}),
+		);
+	}, [listResultSearch, chuoiTimKiem]);
 
 	const handleTimKiem = (chuoiSearch, data) => {
-		// console.log("contentPTSNhhhh: ", contents);
-		// console.log("contentCBCShhhh: ", contents);
-			let listResult = [];
-			let UpCase = "";
-			let LoCase = "";
-		
-			for (let i = 0; i < data.length; i++) {
-			  let element = data[i].tenBaiViet;
-			  UpCase = chuoiSearch.toUpperCase();
-			  LoCase = chuoiSearch.toLowerCase();
-			  if (element.includes(chuoiSearch) || element.includes(UpCase) || element.includes(LoCase)) {
+		let listResult = [];
+		let UpCase = '';
+		let LoCase = '';
+
+		for (let i = 0; i < data.length; i++) {
+			let element = data[i].tenBaiViet;
+			UpCase = chuoiSearch.toUpperCase();
+			LoCase = chuoiSearch.toLowerCase();
+			if (element.includes(chuoiSearch) || element.includes(UpCase) || element.includes(LoCase)) {
 				listResult.push(data[i]);
-			  }
 			}
-			setChuoiTimKiem(chuoiSearch);
-			setListResultSearch(listResult);
-		  };
+		}
+		setChuoiTimKiem(chuoiSearch);
+		setListResultSearch(listResult);
+	};
 
 	return (
-		// <form onSubmit={handleSubmit} className="flex items-center space-x-2 px-4 py-2 max-w-md mx-auto">
-		// 	{/* Input */}
-		// 	<input
-		// 		type="text"
-		// 		name="search"
-		// 		placeholder={placeholder}
-		// 		className="w-full px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 outline-none"
-		// 	/>
-		// 	{/* Button */}
-		// 	<button
-		// 		type="text"
-		// 		className="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-		// 	>
-		// 		Tìm
-		// 	</button>
-		// </form>
-		<form className="max-w-md mx-auto">
-			<label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+		<form className="mx-auto md:min-w-[400px] lg:min-w-[220px]">
+			<label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
 				Search
 			</label>
-			{/* <div className="relative">
-				<input
-					type="search"
-					id="default-search"
-					className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-					placeholder="Search Mockups, Logos..."
-					required
-				/>
-				<button
-					type="submit"
-					className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-				>
-					<svg
-						className="w-4 h-4 text-gray-500 dark:text-gray-400"
-						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 20 20"
-					>
-						<path
-							stroke="currentColor"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-						/>
-					</svg>
-				</button>
-			</div> */}
+
 			<div className="relative md:max-w-md mx-auto">
 				{/* <!-- Input --> */}
 				<input
@@ -134,9 +75,9 @@ const SearchInput = ({ onSearch }) => {
 						stroke="currentColor"
 					>
 						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth="2"
 							d="M21 21l-4.35-4.35m1.85-5.15A7 7 0 1 0 5.65 5.65a7 7 0 0 0 13.5 5.65z"
 						/>
 					</svg>

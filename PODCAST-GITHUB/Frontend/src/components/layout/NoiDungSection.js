@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const ContentSection = ({ contents }) => {
 	const [contentList, setContentList] = useState([contents]);

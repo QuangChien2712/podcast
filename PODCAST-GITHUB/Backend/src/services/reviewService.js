@@ -138,9 +138,6 @@ let handleGetReview = (idContent) => {
      
         reviews = await db.Review.findAll({
           where: { idContent: idContent },
-          attributes: {
-            exclude: ["createdAt", "updatedAt"],
-          },
         });
      
       if(reviews && reviews.length > 0){
