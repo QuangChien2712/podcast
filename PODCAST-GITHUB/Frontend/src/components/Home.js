@@ -26,7 +26,7 @@ const Home = () => {
 						</h3>
 
 						<Link to={GIOI_THIEU} className="mx-auto md:mx-0 md:ml-auto mt-3 hover:no-underline">
-							<div className="px-3 w-[350px] md:w-[500px] lg:w-[600px] mt-[120px] md:mt-32 lg:mt-28">
+							<div className="px-3 w-[380px] md:w-[500px] lg:w-[600px] mt-[120px] md:mt-32 lg:mt-28">
 								<CustomSection
 									title="Sợ Gì Làm Đó! & THEO BLOG"
 									subtitle={
@@ -47,7 +47,7 @@ const Home = () => {
 			{/* Doanh Thu va Loi Nhuan */}
 			<div
 				id="section-career"
-				className="bg-black w-full flex items-center justify-center h-[800px] md:h-[800px] lg:h-[1000px]"
+				className="bg-black w-full flex items-center justify-center h-[830px] md:h-[800px] lg:h-[1000px]"
 			>
 				{/* Background Image */}
 				<div className="bg-TheoO2 max-w-[400px] md:max-w-[700px] lg:max-w-[1000px] w-full bg-center bg-cover bg-no-repeat h-80 md:h-[500px] lg:h-[600px]">
@@ -64,7 +64,7 @@ const Home = () => {
 						</h3>
 
 						<Link to={PTSN} className="mx-auto md:mx-0 md:ml-auto mt-3 hover:no-underline">
-							<div className="px-3 w-[350px] md:w-[500px] lg:w-[600px] mt-[100px] md:mt-[96px] lg:mt-32">
+							<div className="px-3 w-[380px] md:w-[500px] lg:w-[600px] mt-[100px] md:mt-[96px] lg:mt-32">
 								<CustomSection
 									title="Phát Triển Sự Nghiệp"
 									subtitle={
@@ -102,7 +102,7 @@ const Home = () => {
 						</h3>
 
 						<Link to={CBCS} className="mx-auto md:mx-0 md:ml-auto mt-3 hover:no-underline">
-							<div className="px-3 w-[350px] md:w-[500px] lg:w-[600px] mt-[100px] md:mt-[70px] lg:mt-28">
+							<div className="px-3 w-[380px] md:w-[500px] lg:w-[600px] mt-[100px] md:mt-[70px] lg:mt-28">
 								<CustomSection
 									title="Cân Bằng Cuộc Sống"
 									subtitle={

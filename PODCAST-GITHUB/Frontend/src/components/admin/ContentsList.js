@@ -416,7 +416,7 @@ const ContentsList = ({ history }) => {
 				<div className="container mx-auto px-4 sm:px-6 py-8">
 					{/* Header section */}
 					<div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0 mb-6">
-						<h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">Quản lý Bài Viết</h1>
+						<h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">Quản lý bài viết</h1>
 						<Link
 							to="/admin/content"
 							className="w-full sm:w-auto px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition-all flex items-center justify-center"

@@ -297,7 +297,7 @@ const Booking = () => {
 									value={formData.selectedDate}
 									min={getCurrentDate()}
 									onChange={handleInputChange}
-									className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 md:p-2.5"
+									className="bg-gray-50 border w-full border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 md:p-2.5"
 									required
 								/>
 								{formData.selectedDate && (
@@ -355,7 +355,7 @@ const Booking = () => {
 									type="email"
 									name="email"
 									value={user ? user.email : formData.email}
-									disabled={user ? true : false}
+									// disabled={user ? true : false}
 									onChange={handleInputChange}
 									className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 md:p-2.5 disabled:bg-gray-100"
 									placeholder="example@gmail.com"
@@ -372,7 +372,7 @@ const Booking = () => {
 									type="tel"
 									name="phone"
 									value={user ? user.phoneNumber : formData.phone}
-									disabled={user ? true : false}
+									// disabled={user ? true : false}
 									onChange={handleInputChange}
 									className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 md:p-2.5 disabled:bg-gray-100"
 									placeholder="0xxxxxxxxx"
